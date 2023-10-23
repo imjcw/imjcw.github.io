@@ -1,0 +1,54 @@
+<%
+var keywords = '';
+var description = '';
+(function() {
+    if (theme.keywords) {
+        keywords += theme.keywords;
+        keywords += ',';
+    }
+    if (page.keywords) {
+        keywords += page.keywords;
+    }
+    if (config.description) {
+        description += config.description;
+        description += ',';
+    }
+    if  (is_post()) {
+        description += truncate(strip_html(page.content), {length: 100, omission: ','});
+    }
+})();
+%>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title><%= page_title() %></title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="baidu-site-verification" content="code-fFwLG6j4LW" />
+    <% if (keywords) { %><meta name="keywords" content="<%= keywords %>"> <% } %>
+    <% if (description) { %><meta name="description" content="<%= description %>"> <% } %>
+    <% if (config.author){ %><meta name="author" content="<%= config.author %>"> <% } %>
+    <% if (theme.rss){ %><link rel="alternative" href="<%- theme.rss %>" title="<%= config.title %>" type="application/atom+xml"> <% } %>
+    <% if (theme.favicon){ %><link rel="icon" href="<%- url_for(theme.favicon) %>"> <% } %>
+    <%- css(['css/family.css'])%>
+    <%- css(['css/font_1429596_nzgqgvnmkjb.css'])%>
+    <%- css(['css/animate.min.css'])%>
+    <%- css(['css/share.min.css'])%>
+    <%- css(['css/codemirror.min.css'])%>
+    <%- css(['css/dracula.css'])%>
+    <%- css(['css/obsidian.css'])%>
+    <%- css(['css/ball-atom.min.css'])%>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f7f45eb171667d700d7a844efff796dd";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>

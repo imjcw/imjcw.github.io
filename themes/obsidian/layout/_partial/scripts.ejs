@@ -1,0 +1,85 @@
+<% if (theme.gitalk.enable == true) { %> <%-
+css(['//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css'])%> <%-
+js(['//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js'])%> <% } %> <%-
+js(['js/jquery.min.js', 'js/plugin.js', 'js/obsidian.js',
+'js/jquery.truncate.js', 'js/search.js'])%> <%-
+js(['js/typed.min.js']) %> <%-
+js(['js/md5.min.js']) %> <%-
+js(['js/social-share.min.js']) %>
+
+<script src="/js/codemirror.min.js"></script>
+<% theme.codemirror.modes.forEach(function (mode) { %> <%-
+js(['/js/codemirror/' + mode + '.min.js']) %> <% }) %> <% if
+(theme.busuanzi.enable == true) { %> <%- js(['js/busuanzi.min.js']) %>
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+<% } %> <%- partial('photoswipe') %> <% if (config.highlightjs) { %>
+<!-- Highlight.js -->
+<%- css(['css/dracula.css'])%>
+<script src="js/highlight.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', event => {
+    document.querySelectorAll('pre code').forEach(block => {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+<% } %>
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['<%= theme.descriptionOne %>', '<%= theme.descriptionTwo %>'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+<% if (theme.valine.enable) { %> <%- js(['js/Valine.min.js']) %>
+<script>
+  var valine = new Valine();
+
+  function initValine(path) {
+    if (!path) path = window.location.pathname;
+    let language = '<%- config.language %>';
+    if (!language) {
+      language = 'en';
+    } else {
+      language = language.toLowerCase();
+    }
+    valine.init({
+      el: '#vcomments',
+      appId: '<%- theme.valine.app_id %>',
+      appKey: '<%- theme.valine.app_key %>',
+      notify: '<%- theme.valine.notify %>',
+      verify: '<%- theme.valine.verify %>',
+      avatar: '<%- theme.valine.avatar %>',
+      placeholder: '<%- theme.valine.placeholder %>',
+      visitor: '<%- theme.valine.visitor %>',
+      path: path,
+      lang: language,
+    });
+  }
+
+  $(document).ready(function () {
+    initValine();
+  });
+</script>
+<% } %>
