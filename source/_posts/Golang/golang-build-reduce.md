@@ -1,5 +1,5 @@
 ---
-title: Golang编译包体积优化
+title: 优化Golang编译时的二进制文件大小
 tags:
     - Golang
 date: 2023-10-25 19:39:13
@@ -11,13 +11,13 @@ categories:
 
 公司用了阿里云的 `SLS` 来查看分析日志，可站点打开实属很慢，有时候某些简单的查询需要经历登录、选时间、编写语句、查询、筛选等多个步骤。
 
-于是用 `Go` 编写了一个查看日志的小工具，并部署到了公司的内部服务器，方便查询一些特定场景的日志。比如请求某些接口时的相关数据、消息体等。
+因此，我使用 `Golang` 开发了一个小型日志分析工具，并部署在公司的内部服务器上，以便查询特定场景的日志。
 
 ## 遇到的问题
 
 ### net包问题
 
-一开始的构建命令很简单，直接是 `go build -o demo`。结果将 `demo` 拿到别的服务器运行的时候，报错了。
+最初的构建命令很简单：`go build -o demo`。然而，当我尝试在另一台服务器上运行 `demo` 二进制文件时，由于 `Golang` 中的 `net` 包依赖，出现了错误。
 
 原因是默认情况下 `Go` 编译器会使用动态链接方式将网络相关的包链接到生成的二进制文件中。这意味着生成的二进制文件将依赖于系统中已安装的共享库来提供网络功能。
 
@@ -29,7 +29,7 @@ go build -tags netgo -o demo
 
 ### 二进制文件大小问题
 
-由于没有任何参数优化，原始包的大小是 `19M`，每次 `scp` 都会多花一点时间。在时间比较充裕的情况下，研究了一下如何减小二进制文件的体积。
+由于没有任何参数优化，原始包的大小是 `19M`，每次 `scp` 都会多花一点时间。有足够的时间，我深入研究了如何减小 `Golang` 二进制文件的大小的技巧。
 
 #### 使用编译选项 `-ldflags="-s -w"`
 
@@ -45,7 +45,7 @@ go build -tags netgo -o demo
 go build -ldflags="-s -w" -tags netgo -o demo
 ```
 
-#### 使用 `upx`
+#### 使用 `UPX` 压缩 `Golang` 二进制文件
 
 > UPX is an advanced executable file compressor. UPX will typically reduce the file size of programs and DLLs by around 50%-70%, thus reducing disk space, network load times, download times and other distribution and storage costs.
 >
@@ -107,7 +107,7 @@ brew install upx
 
 ## 最后
 
-问题总是在不断探索中解决，虽然 `19M` 的文件大小并不会影响什么，但当碰到真正需要解决的问题的时候，这次探索就变得有意义了。
+问题的解决是一个持续的探索过程。尽管 `19M` 的文件大小可能没有太大影响，但当遇到需要解决的实际问题时，尤其是在 `Golang` 优化的背景下，这次探索就变得有意义了。
 
 ## 参考
 
