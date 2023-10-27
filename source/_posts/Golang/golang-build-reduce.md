@@ -3,8 +3,12 @@ title: 优化Golang编译时的二进制文件大小
 tags:
     - Golang
 date: 2023-10-25 19:39:13
+banner_img: /media/Golang/banner-1698400614.png
 categories:
     - Golang
+post_img:
+    enable: true
+    default: /media/Golang/banner-1698400614.png
 ---
 
 ## 前言
