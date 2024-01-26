@@ -7,6 +7,8 @@ categories:
     - github
 ---
 
+> 此文不定期更新，涉及站点可能失效
+
 ## 前言
 
 有时需要从 `github` 上拉取项目，会遇到 **Failed to connect to github.com port 443** 的情况。
