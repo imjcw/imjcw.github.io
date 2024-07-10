@@ -28,6 +28,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: addWeixinVerify
+        run: echo 'rIQx5BeMF8TLKzWH' > ./public/WW_verify_rIQx5BeMF8TLKzWH.txt
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
