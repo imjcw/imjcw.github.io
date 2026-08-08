@@ -1418,6 +1418,16 @@ img {
   padding-top: 6px;
   border-top: 1px solid rgba(26, 26, 26, 0.15);
 }
+.post-disclaimer-text a.cc-link {
+  color: #ef4444;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-style: normal;
+}
+.post-disclaimer-text a.cc-link:hover {
+  color: #3b82f6;
+}
 
 /* ========== Archive ========== */
 .archive-year {
