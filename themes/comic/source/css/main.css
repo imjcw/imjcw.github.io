@@ -158,74 +158,17 @@ img {
   overflow: hidden;
 }
 
-.hero-deco-star {
+.deco-star {
   position: absolute;
   pointer-events: none;
   font-size: 18px;
   line-height: 1;
-  color: rgba(26, 26, 26, 0.15);
+  color: rgba(26, 26, 26, 0.5);
   font-weight: 900;
-  will-change: opacity, transform;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+  will-change: opacity;
 }
-@keyframes star-tinkle {
-  0%, 100% { opacity: var(--dim, 0.15); transform: scale(var(--scale-from, 1)) rotate(var(--rot)); }
-  50% { opacity: var(--bright, 0.6); transform: scale(var(--scale-to, 1.3)) rotate(var(--rot)); }
-}
-
-.hero-deco-star.s1 { top: 8%; left: 6%; font-size: 22px; --rot: -15deg; --scale-from: 1; --scale-to: 1.4; --dim: 0.1; --bright: 0.7; animation: star-tinkle 6s ease-in-out infinite; }
-.hero-deco-star.s2 { top: 15%; right: 8%; font-size: 16px; --rot: 20deg; --scale-from: 1; --scale-to: 1.5; --dim: 0.12; --bright: 0.5; animation: star-tinkle 8s ease-in-out 1s infinite; }
-.hero-deco-star.s3 { top: 30%; left: 3%; font-size: 14px; --rot: 35deg; --scale-from: 1; --scale-to: 1.3; --dim: 0.08; --bright: 0.6; animation: star-tinkle 5s ease-in-out 2s infinite; }
-.hero-deco-star.s4 { top: 40%; right: 5%; font-size: 24px; --rot: -10deg; color: #ef4444; --scale-from: 1; --scale-to: 1.5; --dim: 0.1; --bright: 0.5; animation: star-tinkle 9s ease-in-out 3s infinite; }
-.hero-deco-star.s5 { top: 55%; left: 10%; font-size: 18px; --rot: 45deg; --scale-from: 1; --scale-to: 1.4; --dim: 0.12; --bright: 0.65; animation: star-tinkle 7s ease-in-out 1.5s infinite; }
-.hero-deco-star.s6 { top: 65%; right: 12%; font-size: 14px; --rot: -25deg; --scale-from: 1; --scale-to: 1.3; --dim: 0.08; --bright: 0.55; animation: star-tinkle 5.5s ease-in-out 2.5s infinite; }
-.hero-deco-star.s7 { top: 78%; left: 5%; font-size: 20px; --rot: 10deg; color: #3b82f6; --scale-from: 1; --scale-to: 1.4; --dim: 0.1; --bright: 0.5; animation: star-tinkle 8.5s ease-in-out 4s infinite; }
-.hero-deco-star.s8 { top: 88%; right: 4%; font-size: 16px; --rot: -40deg; --scale-from: 1; --scale-to: 1.3; --dim: 0.1; --bright: 0.6; animation: star-tinkle 6.5s ease-in-out 0.5s infinite; }
-.hero-deco-star.s9 { top: 5%; left: 45%; font-size: 14px; --rot: 15deg; --scale-from: 1; --scale-to: 1.5; --dim: 0.08; --bright: 0.65; animation: star-tinkle 7.5s ease-in-out 3.5s infinite; }
-.hero-deco-star.s10 { bottom: 8%; left: 40%; font-size: 12px; --rot: -20deg; --scale-from: 1; --scale-to: 1.4; --dim: 0.1; --bright: 0.55; animation: star-tinkle 9.5s ease-in-out 2s infinite; }
-.hero-deco-star.s11 { top: 22%; right: 30%; font-size: 20px; --rot: 30deg; color: #facc15; --scale-from: 1; --scale-to: 1.3; --dim: 0.15; --bright: 0.7; animation: star-tinkle 6.8s ease-in-out 1.2s infinite; }
-.hero-deco-star.s12 { top: 72%; right: 35%; font-size: 16px; --rot: -15deg; --scale-from: 1; --scale-to: 1.4; --dim: 0.08; --bright: 0.55; animation: star-tinkle 7.2s ease-in-out 4.5s infinite; }
-
-/* CSS sparkle (4-point star) */
-.hero-deco-sparkle {
-  position: absolute;
-  pointer-events: none;
-  width: 14px;
-  height: 14px;
-  will-change: opacity, transform;
-}
-@keyframes sparkle-tinkle {
-  0%, 100% { opacity: var(--sdim, 0.3); transform: scale(var(--sc, 1)); }
-  50% { opacity: var(--sbright, 0.9); transform: scale(calc(var(--sc, 1) * 1.5)); }
-}
-.hero-deco-sparkle::before,
-.hero-deco-sparkle::after {
-  content: '';
-  position: absolute;
-  background: rgba(26, 26, 26, 0.15);
-  border-radius: 2px;
-}
-.hero-deco-sparkle::before {
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  transform: translateY(-50%);
-}
-.hero-deco-sparkle::after {
-  top: 0;
-  left: 50%;
-  width: 2px;
-  height: 100%;
-  transform: translateX(-50%);
-}
-.hero-deco-sparkle.p1 { top: 12%; left: 20%; --sc: 1.2; --sdim: 0.2; --sbright: 0.9; animation: sparkle-tinkle 5s ease-in-out infinite; }
-.hero-deco-sparkle.p2 { top: 35%; left: 80%; --sc: 0.8; --sdim: 0.3; --sbright: 0.8; animation: sparkle-tinkle 6s ease-in-out 1s infinite; }
-.hero-deco-sparkle.p3 { top: 60%; left: 15%; --sc: 1.4; --sdim: 0.2; --sbright: 0.9; animation: sparkle-tinkle 4.5s ease-in-out 2s infinite; }
-.hero-deco-sparkle.p4 { top: 75%; left: 70%; --sc: 1; --sdim: 0.3; --sbright: 0.85; animation: sparkle-tinkle 7s ease-in-out 3s infinite; }
-.hero-deco-sparkle.p5 { top: 8%; left: 70%; --sc: 0.9; --sdim: 0.2; --sbright: 0.9; animation: sparkle-tinkle 5.5s ease-in-out 1.5s infinite; }
-.hero-deco-sparkle.p6 { top: 48%; left: 88%; --sc: 1.1; --sdim: 0.3; --sbright: 0.85; animation: sparkle-tinkle 6.5s ease-in-out 2.5s infinite; }
-.hero-deco-sparkle.p7 { top: 90%; left: 25%; --sc: 1.3; --sdim: 0.2; --sbright: 0.9; animation: sparkle-tinkle 4.8s ease-in-out 0.5s infinite; }
-.hero-deco-sparkle.p8 { top: 28%; left: 50%; --sc: 0.7; --sdim: 0.3; --sbright: 0.8; animation: sparkle-tinkle 7.5s ease-in-out 4s infinite; }
 
 .hero-inner {
   max-width: 1200px;
