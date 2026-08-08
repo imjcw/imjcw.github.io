@@ -75,24 +75,233 @@
 
       article.addEventListener('click', function (e) {
         var btn = e.target.closest ? e.target.closest('.code-copy-btn') : null;
-        if (!btn) return;
-        var fig = btn.parentElement;
-        var pre = fig.querySelector('pre');
-        if (!pre) return;
-        navigator.clipboard.writeText(pre.innerText || pre.textContent).then(function () {
-          var old = fig.querySelector('.code-copy-bubble');
-          if (old) old.remove();
-          var bubble = document.createElement('span');
-          bubble.className = 'code-copy-bubble';
-          bubble.textContent = '已复制';
-          fig.appendChild(bubble);
-          requestAnimationFrame(function () { bubble.classList.add('show'); });
-          setTimeout(function () {
-            bubble.classList.remove('show');
-            setTimeout(function () { bubble.remove(); }, 200);
-          }, 1200);
-        }).catch(function () {});
+        if (btn) {
+          var fig = btn.parentElement;
+          var pre = fig.querySelector('pre');
+          if (pre) {
+            navigator.clipboard.writeText(pre.innerText || pre.textContent).then(function () {
+              var old = fig.querySelector('.code-copy-bubble');
+              if (old) old.remove();
+              var bubble = document.createElement('span');
+              bubble.className = 'code-copy-bubble';
+              bubble.textContent = '已复制';
+              fig.appendChild(bubble);
+              requestAnimationFrame(function () { bubble.classList.add('show'); });
+              setTimeout(function () {
+                bubble.classList.remove('show');
+                setTimeout(function () { bubble.remove(); }, 200);
+              }, 1200);
+            }).catch(function () {});
+          }
+          return;
+        }
+
+        // Image lightbox
+        var img = e.target.closest ? e.target.closest('img') : null;
+        if (img && img.classList.contains('post-img-clickable')) {
+          e.preventDefault();
+          imgPreview.open(img);
+        }
       });
+
+      // Make images clickable
+      article.querySelectorAll('img').forEach(function (img) {
+        img.classList.add('post-img-clickable');
+        img.style.cursor = 'pointer';
+      });
+    })();
+  </script>
+
+  <script>
+    var imgPreview = (function () {
+      var overlay = null;
+      var box = null;
+      var imgEl = null;
+      var closeBtn = null;
+      var zoomInBtn = null, zoomOutBtn = null, resetBtn = null, zoomLabel = null;
+
+      var scale = 1;
+      var panX = 0, panY = 0;
+      var isPanning = false;
+      var panStartX = 0, panStartY = 0;
+      var spacePressed = false;
+      var initialized = false;
+
+      function build() {
+        overlay = document.createElement('div');
+        overlay.className = 'img-preview-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('tabindex', '-1');
+
+        box = document.createElement('div');
+        box.className = 'img-preview-box';
+
+        imgEl = document.createElement('img');
+        imgEl.className = 'img-preview-img';
+        imgEl.draggable = false;
+        box.appendChild(imgEl);
+
+        // Zoom controls
+        var controls = document.createElement('div');
+        controls.className = 'img-preview-controls';
+
+        zoomOutBtn = document.createElement('span');
+        zoomOutBtn.className = 'img-preview-zoom-out';
+        zoomOutBtn.title = '缩小';
+        zoomOutBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 12 H18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+        zoomOutBtn.addEventListener('click', function () { applyZoom(-0.2, innerWidth / 2, innerHeight / 2); });
+
+        zoomLabel = document.createElement('span');
+        zoomLabel.className = 'img-preview-zoom-label';
+        zoomLabel.textContent = '100%';
+
+        zoomInBtn = document.createElement('span');
+        zoomInBtn.className = 'img-preview-zoom-in';
+        zoomInBtn.title = '放大';
+        zoomInBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 6 V18 M6 12 H18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+        zoomInBtn.addEventListener('click', function () { applyZoom(0.2, innerWidth / 2, innerHeight / 2); });
+
+        resetBtn = document.createElement('span');
+        resetBtn.className = 'img-preview-reset';
+        resetBtn.title = '重置';
+        resetBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 12a8 8 0 1 1 2 5.7" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/><polyline points="4,4 4,10 10,10" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        resetBtn.addEventListener('click', reset);
+
+        controls.appendChild(zoomOutBtn);
+        controls.appendChild(zoomLabel);
+        controls.appendChild(zoomInBtn);
+        controls.appendChild(resetBtn);
+        overlay.appendChild(controls);
+
+        closeBtn = document.createElement('span');
+        closeBtn.className = 'img-preview-close';
+        closeBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24"><path d="M6 6 L18 18 M18 6 L6 18" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+        overlay.appendChild(closeBtn);
+
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        closeBtn.addEventListener('click', close);
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) close();
+        });
+
+        overlay.addEventListener('wheel', function (e) {
+          e.preventDefault();
+          var delta = -e.deltaY * 0.001;
+          if (Math.abs(delta) < 0.01) return;
+          applyZoom(delta * 3, e.clientX, e.clientY);
+        }, { passive: false });
+
+        overlay.addEventListener('mousedown', function (e) {
+          if (e.target === overlay || e.target.classList.contains('img-preview-img')) {
+            isPanning = true;
+            panStartX = e.clientX - panX;
+            panStartY = e.clientY - panY;
+            imgEl.style.cursor = 'grabbing';
+          }
+        });
+
+        document.addEventListener('mousemove', function (e) {
+          if (!isPanning) return;
+          panX = e.clientX - panStartX;
+          panY = e.clientY - panStartY;
+          applyTransform();
+        });
+
+        document.addEventListener('mouseup', function () {
+          if (isPanning) {
+            isPanning = false;
+            imgEl.style.cursor = spacePressed ? 'grab' : 'zoom-out';
+          }
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (!overlay || !overlay.classList.contains('visible')) return;
+          if (e.key === 'Escape') { close(); return; }
+          if (e.code === 'Space') {
+            e.preventDefault();
+            if (!spacePressed) {
+              spacePressed = true;
+              imgEl.style.cursor = 'grab';
+              box.style.cursor = 'grab';
+            }
+          }
+          if (e.key === '+' || e.key === '=') { applyZoom(0.2, innerWidth / 2, innerHeight / 2); }
+          if (e.key === '-') { applyZoom(-0.2, innerWidth / 2, innerHeight / 2); }
+          if (e.key === '0' || e.key === '1' && e.shiftKey) { /* reset on 0 handled below */ }
+          if (e.key === '0') { reset(); }
+        });
+
+        document.addEventListener('keyup', function (e) {
+          if (e.code === 'Space') {
+            spacePressed = false;
+            imgEl.style.cursor = scale > 1 ? 'grab' : 'zoom-out';
+            box.style.cursor = scale > 1 ? 'grab' : '';
+          }
+        });
+
+        initialized = true;
+      }
+
+      function applyZoom(delta, cx, cy) {
+        var newScale = Math.max(0.1, Math.min(10, scale + delta));
+        if (newScale === scale) return;
+        // Zoom toward cursor
+        var oldScale = scale;
+        scale = newScale;
+        var factor = scale / oldScale;
+        panX = cx - (cx - panX) * factor;
+        panY = cy - (cy - panY) * factor;
+        applyTransform();
+      }
+
+      function applyTransform() {
+        if (!imgEl) return;
+        var cs = imgEl.ownerDocument.defaultView.getComputedStyle(imgEl);
+        var tw = 12;
+        imgEl.style.transform = 'scale(' + scale + ') translate(' + (panX / scale) + 'px, ' + (panY / scale) + 'px)';
+        imgEl.style.transformOrigin = 'center center';
+        zoomLabel.textContent = Math.round(scale * 100) + '%';
+
+        // Show/hide pan affordance
+        if (scale > 1 && !spacePressed) {
+          imgEl.style.cursor = 'grab';
+          box.style.cursor = 'grab';
+        }
+        if (scale <= 1) {
+          imgEl.style.cursor = 'zoom-out';
+          box.style.cursor = '';
+        }
+      }
+
+      function reset() {
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        applyTransform();
+      }
+
+      function open(srcImg) {
+        if (!overlay) build();
+        imgEl.src = srcImg.src;
+        imgEl.alt = srcImg.alt || '';
+        scale = 1;
+        panX = 0;
+        panY = 0;
+        spacePressed = false;
+        applyTransform();
+        overlay.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        if (!overlay) return;
+        overlay.classList.remove('visible');
+        document.body.style.overflow = '';
+      }
+
+      return { open: open };
     })();
   </script>
 </main>

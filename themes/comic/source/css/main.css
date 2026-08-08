@@ -995,6 +995,125 @@ img {
   transform: translateY(0) scale(1);
 }
 
+/* Image preview lightbox */
+.img-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+  cursor: zoom-out;
+}
+.img-preview-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+.img-preview-box {
+  position: relative;
+  max-width: 92vw;
+  max-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-preview-img {
+  max-width: 92vw;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 4px solid #fffef0;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.img-preview-close {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fffef0;
+  border: 3px solid #1a1a1a;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #1a1a1a;
+  transition: transform 0.1s;
+  z-index: 10000;
+}
+.img-preview-close:hover {
+  background: #facc15;
+}
+.img-preview-close:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* Zoom controls (bottom center) */
+.img-preview-controls {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #fffef0;
+  border: 3px solid #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 2px 2px 0 #1a1a1a;
+  z-index: 10001;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+.img-preview-overlay.visible .img-preview-controls {
+  opacity: 1;
+  visibility: visible;
+}
+.img-preview-zoom-in,
+.img-preview-zoom-out,
+.img-preview-reset {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.img-preview-zoom-in:hover,
+.img-preview-zoom-out:hover,
+.img-preview-reset:hover {
+  background: #facc15;
+}
+.img-preview-zoom-label {
+  font-size: 13px;
+  font-weight: 900;
+  color: #1a1a1a;
+  min-width: 42px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.img-preview-overlay.visible .img-preview-img {
+  transition: transform 0.05s ease-out;
+}
+
 .post-content .highlight .gutter,
 .post-content .highlight td.code {
   /* already styled */
