@@ -15,9 +15,8 @@
 
 <main class="main">
   <div class="main-inner">
-    <div class="layout-grid">
-      <div class="post-list">
-        <% page.posts.each(function(post) { %>
+    <div class="post-list">
+      <% page.posts.each(function(post) { %>
           <article class="post-list-item">
             <div class="post-list-left">
               <div class="post-list-date">
@@ -55,18 +54,5 @@
           </article>
         <% }); %>
       </div>
-
-      <aside>
-        <div class="sidebar">
-          <h3 class="sidebar-title">全部分类</h3>
-          <% site.categories.each(function(cate) { %>
-            <a href="<%- url_for(cate.path) %>" class="sidebar-item">
-              <span><%= cate.name %></span>
-              <span class="count"><%= cate.posts.length %></span>
-            </a>
-          <% }); %>
-        </div>
-      </aside>
     </div>
-  </div>
 </main>
