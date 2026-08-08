@@ -2,20 +2,19 @@
 <html lang="<%= config.language || 'zh-CN' %>">
 <%- partial('_partial/head.ejs') %>
 <body>
-  <div class="page-stars">
-    <span class="deco-star d1">✦</span>
-    <span class="deco-star d2">✧</span>
-    <span class="deco-star d3">✦</span>
-    <span class="deco-star d4">✧</span>
-    <span class="deco-star d5">✦</span>
-    <span class="deco-star d6">✧</span>
-    <span class="deco-star d7">✦</span>
-    <span class="deco-star d8">✧</span>
-    <span class="deco-star d9">✦</span>
-    <span class="deco-star d10">✧</span>
-    <span class="deco-star d11">✦</span>
-    <span class="deco-star d12">✧</span>
-  </div>
+  <div class="deco-star ds1" style="top:8%;left:6%;">✦</div>
+  <div class="deco-star ds2" style="top:15%;left:88%;">✧</div>
+  <div class="deco-star ds3" style="top:30%;left:3%;">✦</div>
+  <div class="deco-star ds4" style="top:42%;left:95%;">✧</div>
+  <div class="deco-star ds5" style="top:55%;left:10%;">✦</div>
+  <div class="deco-star ds6" style="top:65%;left:88%;">✧</div>
+  <div class="deco-star ds7" style="top:78%;left:5%;">✦</div>
+  <div class="deco-star ds8" style="top:88%;left:96%;">✧</div>
+  <div class="deco-star ds9" style="top:5%;left:45%;">✦</div>
+  <div class="deco-star ds10" style="top:92%;left:40%;">✧</div>
+  <div class="deco-star ds11" style="top:22%;left:70%;">✦</div>
+  <div class="deco-star ds12" style="top:72%;left:65%;">✧</div>
+
   <script>
     (function () {
       var stars = document.querySelectorAll('.deco-star');
@@ -26,41 +25,28 @@
         return Math.random() * (max - min) + min;
       }
 
-      function place(star, immediate) {
-        var size = rand(14, 24);
-        var x = rand(2, w - 20);
-        var y = rand(2, h - 20);
-        var brightness = rand(0.35, 0.75);
-        var rot = rand(-45, 45);
-        star.style.left = x + 'px';
-        star.style.top = y + 'px';
-        star.style.fontSize = size + 'px';
-        star.style.transform = 'rotate(' + rot + 'deg)';
-        star.style.color = 'rgba(26,26,26,' + brightness + ')';
-        if (immediate) {
-          star.style.opacity = '1';
-        } else {
-          star.style.opacity = '0';
-        }
-      }
-
-      // Initial placement — all visible
-      stars.forEach(function (s) { place(s, true); });
-
-      // Slowly fade out one star, then fade in at random position
       function relocateOne() {
         var idx = Math.floor(Math.random() * stars.length);
         var star = stars[idx];
-        star.classList.add('visible');
+        star.style.transition = 'opacity 2s ease-in-out';
         star.style.opacity = '0';
         setTimeout(function () {
-          place(star, true);
+          star.style.transition = 'none';
+          star.style.left = rand(2, w - 30) + 'px';
+          star.style.top = rand(2, h - 30) + 'px';
+          star.style.fontSize = rand(18, 32) + 'px';
+          var rot = rand(-45, 45);
+          var b = rand(0.45, 0.85);
+          star.style.transform = 'rotate(' + rot + 'deg)';
+          star.style.color = 'rgba(26,26,26,' + b + ')';
+          star.style.opacity = '1';
         }, 2500);
       }
 
       setInterval(relocateOne, 4000);
     })();
   </script>
+
   <%- partial('_partial/nav.ejs') %>
   <%- body %>
   <%- partial('_partial/footer.ejs') %>
