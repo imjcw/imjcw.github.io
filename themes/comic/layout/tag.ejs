@@ -1,0 +1,102 @@
+<% var tagDesc = theme.tags.description || '所有标签' %>
+
+<section class="py-16 md:py-20 px-6 md:px-8 lg:px-12">
+  <div class="max-w-3xl mx-auto text-center">
+    <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
+      标签 / #<%= page.name || '' %>
+    </span>
+    <h1 class="mt-6 text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight">
+      #<%= page.name || '标签' %>
+    </h1>
+    <p class="mt-5 text-[#1a1a1a]/70 text-sm font-bold leading-relaxed max-w-xl mx-auto">
+      <%= page.description || '' %>
+    </p>
+  </div>
+</section>
+
+<main class="py-12 px-6 md:px-8 lg:px-12">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-12 text-center">
+      <% site.tags.each(function(tag) { %>
+        <a href="<%- url_for(tag.path) %>"
+           class="inline-block m-1 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide border-2 border-[#1a1a1a] shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] transition-all duration-150
+                  <%= tag.name === page.name ? 'bg-[#ef4444] text-white' : 'bg-[#facc15] text-[#1a1a1a] hover:bg-[#ef4444] hover:text-white' %>">
+          #<%= tag.name %>
+        </a>
+      <% }); %>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% page.posts.each(function(post) { %>
+        <article class="group bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 p-4 md:p-6">
+          <div class="p-4 md:p-6">
+            <% if (post.categories.length > 0) { %>
+              <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
+                <%- post.categories.first().name %>
+              </span>
+            <% } %>
+            <h3 class="mt-3 text-lg font-black uppercase tracking-tight leading-tight">
+              <a href="<%- url_for(post.path) %>" class="hover:opacity-90">
+                <%= post.title %>
+              </a>
+            </h3>
+            <p class="mt-3 text-[#1a1a1a]/70 text-sm font-bold leading-relaxed">
+              <% var excerpt = post.excerpt ? strip_html(post.excerpt) : strip_html(post.content) %>
+              <%- excerpt.substr(0, 80) %><% if (excerpt.length > 80) { %>...<% } %>
+            </p>
+            <div class="mt-4 flex items-center gap-3 text-xs font-bold text-[#1a1a1a]/60">
+              <span><%- date(post.date, config.date_format) %></span>
+              <span>·</span>
+              <span><%= Math.ceil(post.content.length / 400) %> 分钟</span>
+            </div>
+            <% if (post.tags.length > 0) { %>
+            <div class="mt-3 flex gap-2 flex-wrap">
+              <% post.tags.each(function(tag) { %>
+                <a href="<%- url_for(tag.path) %>"
+                   class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:bg-[#ef4444] hover:text-white transition-colors">
+                  #<%= tag.name %>
+                </a>
+              <% }); %>
+            </div>
+            <% } %>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+
+    <% if (page.total > page.per_page) { %>
+    <div class="mt-16 flex justify-center">
+      <%- paginator({
+        prev_text: '← 上一页',
+        next_text: '下一页 →',
+        mid_surround: 2
+      }) %>
+    </div>
+    <style>
+      .pagination { display: flex; align-items: center; gap: 4px; }
+      .pagination a, .pagination span {
+        display: inline-block;
+        font-family: 'Archivo Black', sans-serif;
+        font-size: 14px;
+        font-weight: 900;
+        padding: 10px 16px;
+        border: 3px solid #1a1a1a;
+        background: #fffef0;
+        color: #1a1a1a;
+        text-decoration: none;
+        box-shadow: 4px 4px 0px 0px rgba(26,26,26,1);
+        transition: all 0.15s;
+      }
+      .pagination a:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px 0px rgba(26,26,26,1);
+      }
+      .pagination .page-number.current {
+        background: #ef4444;
+        color: white;
+      }
+      .pagination .extend { color: #1a1a1a; }
+    </style>
+    <% } %>
+  </div>
+</main>

@@ -1,0 +1,61 @@
+# Comic Style Theme Configuration
+# -------------------------------
+
+# Navigation menu
+menu:
+  Home: /
+  Categories: /categories
+  Tags: /tags
+  Archives: /archives
+
+# Hero section (homepage)
+hero:
+  enable: true
+  badge: BOOM!
+  title: 英雄之日
+  description: 每一页都是分镜，每一格都是一次冒险。
+  buttons:
+    - text: 阅读正文
+      url: /archives
+    - text: 归档
+      url: /archives
+
+# Homepage section title
+index:
+  section_title: 新连载!
+  full_catalog_url: /archives
+  show_category: true
+  show_tags: true
+
+# Footer
+footer:
+  copyright: '2026'
+  description: '技术手记'
+
+# Post meta display
+post_meta:
+  show_date: true
+  show_author: true
+  show_categories: true
+  show_tags: true
+
+# Tags page
+tags:
+  description: 所有标签
+
+# Categories page
+categories:
+  description: 全部分类
+
+# Archives page
+archives:
+  description: 按时间归档
+
+# Color scheme (可自定义)
+colors:
+  bg: '#fffef0'
+  text: '#1a1a1a'
+  border: '#1a1a1a'
+  accent_yellow: '#facc15'
+  accent_red: '#ef4444'
+  accent_blue: '#3b82f6'

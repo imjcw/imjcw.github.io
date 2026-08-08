@@ -1,0 +1,72 @@
+<% var archiveDesc = theme.archives.description || '按时间归档' %>
+
+<section class="py-16 md:py-20 px-6 md:px-8 lg:px-12">
+  <div class="max-w-3xl mx-auto text-center">
+    <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
+      归档 / <%= page.year || 'ALL' %>
+    </span>
+    <h1 class="mt-6 text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight">
+      <%= page.year || '归档' %>
+    </h1>
+    <p class="mt-5 text-[#1a1a1a]/70 text-sm font-bold leading-relaxed max-w-xl mx-auto">
+      <%= archiveDesc %>
+    </p>
+  </div>
+</section>
+
+<main class="py-12 px-6 md:px-8 lg:px-12">
+  <div class="max-w-4xl mx-auto">
+    <%
+      var posts = page.posts;
+      var groups = {};
+      posts.each(function(post) {
+        var year = post.date.year();
+        var month = post.date.format('YYYY-MM');
+        if (!groups[year]) groups[year] = {};
+        if (!groups[year][month]) groups[year][month] = [];
+        groups[year][month].push(post);
+      });
+      var yearKeys = Object.keys(groups).sort().reverse();
+    %>
+    <% yearKeys.forEach(function(year) { %>
+      <div class="mb-12">
+        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tight mb-6 flex items-center gap-4">
+          <span class="bg-[#1a1a1a] text-[#facc15] px-4 py-2 border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)]">
+            <%= year %>
+          </span>
+          <span class="text-[#1a1a1a]/50 text-sm font-black">共 <%= Object.values(groups[year]).reduce(function(a, b) { return a + b.length; }, 0) %> 篇</span>
+        </h2>
+        <%
+          var monthKeys = Object.keys(groups[year]).sort().reverse();
+          monthKeys.forEach(function(month) {
+        %>
+          <div class="ml-8 mb-6">
+            <h3 class="text-lg font-black uppercase tracking-tight mb-3 text-[#1a1a1a]/80">
+              <%= month %>
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <% groups[year][month].forEach(function(post) { %>
+                <a href="<%- url_for(post.path) %>"
+                   class="group flex items-center gap-4 bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 p-3 md:p-4">
+                  <span class="flex-shrink-0 text-2xl font-black text-[#ef4444] w-8 text-center">
+                    <%= post.date.date().toString().padStart(2, '0') %>
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-sm font-black uppercase tracking-tight leading-tight group-hover:opacity-90 truncate">
+                      <%= post.title %>
+                    </div>
+                    <div class="mt-1 text-xs font-bold text-[#1a1a1a]/50">
+                      <% if (post.categories.length > 0) { %>
+                        <%- post.categories.first().name %>
+                      <% } %>
+                    </div>
+                  </div>
+                </a>
+              <% }); %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% }); %>
+  </div>
+</main>
