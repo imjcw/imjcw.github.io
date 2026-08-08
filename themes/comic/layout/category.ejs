@@ -1,7 +1,14 @@
 <section class="page-header">
   <div class="page-header-inner">
-    <span class="badge">分类 / <%= page.name || '' %></span>
-    <h1 class="page-header-title"><%= page.name || '分类' %></h1>
+    <% var cn = '' %>
+    <% var pp = page.path || '' %>
+    <% var ppTrimmed = pp.replace(/\/index\.html$/, '').replace(/\/$/, '') %>
+    <% site.categories.each(function(c) {
+        var cp = c.path.replace(/\/$/, '')
+        if (cp === ppTrimmed) { cn = c.name }
+    }); %>
+    <span class="badge">分类 / <%= cn || page.title || page.category || '' %></span>
+    <h1 class="page-header-title"><%= cn || page.title || page.category || '分类' %></h1>
     <p class="page-header-desc"><%= page.description || '' %></p>
   </div>
 </section>
@@ -9,30 +16,41 @@
 <main class="main">
   <div class="main-inner">
     <div class="layout-grid">
-      <div class="card-grid-2">
+      <div class="post-list">
         <% page.posts.each(function(post) { %>
-          <article class="card">
-            <div class="card-body">
-              <span class="card-tag"><%= page.name %></span>
+          <article class="post-list-item">
+            <div class="post-list-left">
+              <div class="post-list-date">
+                <span class="post-list-day"><%= post.date.date().toString().padStart(2, '0') %></span>
+                <span class="post-list-year"><%= post.date.year() %></span>
+              </div>
+              <% if (post.categories.length > 0) { %>
+                <span class="card-tag"><%= post.categories.first().name %></span>
+              <% } %>
+            </div>
+            <div class="post-list-right">
               <h3 class="card-title">
                 <a href="<%- url_for(post.path) %>"><%= post.title %></a>
               </h3>
               <p class="card-excerpt">
-                <% var excerpt = post.excerpt ? strip_html(post.excerpt) : strip_html(post.content) %>
-                <%- excerpt.substr(0, 80) %><% if (excerpt.length > 80) { %>...<% } %>
+                <% var excerpt = '' %>
+                <% if (post.excerpt) { %>
+                  <% excerpt = strip_html(post.excerpt).substr(0, 120) %>
+                <% } else { %>
+                  <% excerpt = strip_html(post.content).substr(0, 120) %>
+                <% } %>
+                <%- excerpt %><% if (excerpt.length >= 120) { %>...<% } %>
               </p>
               <div class="card-meta">
-                <span><%- date(post.date, config.date_format) %></span>
-                <span>·</span>
-                <span><%= Math.ceil(post.content.length / 400) %> 分钟</span>
+                <span><%= post.content ? Math.ceil(post.content.length / 400) : 5 %> 分钟</span>
+                <% if (post.tags.length > 0) { %>
+                  <span class="post-list-tags">
+                    <% post.tags.each(function(tag) { %>
+                      <a href="<%- url_for(tag.path) %>" class="tag-pill">#<%= tag.name %></a>
+                    <% }); %>
+                  </span>
+                <% } %>
               </div>
-              <% if (post.tags.length > 0) { %>
-                <div class="card-tags">
-                  <% post.tags.each(function(tag) { %>
-                    <a href="<%- url_for(tag.path) %>" class="tag-pill">#<%= tag.name %></a>
-                  <% }); %>
-                </div>
-              <% } %>
             </div>
           </article>
         <% }); %>
