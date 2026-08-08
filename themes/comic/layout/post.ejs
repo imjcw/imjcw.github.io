@@ -104,10 +104,16 @@
         }
       });
 
-      // Make images clickable
+      // Make images clickable + add caption from alt
       article.querySelectorAll('img').forEach(function (img) {
         img.classList.add('post-img-clickable');
         img.style.cursor = 'pointer';
+        if (img.alt) {
+          var cap = document.createElement('div');
+          cap.className = 'post-img-caption';
+          cap.textContent = img.alt;
+          img.parentNode.insertBefore(cap, img.nextSibling);
+        }
       });
     })();
   </script>

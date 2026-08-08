@@ -1040,6 +1040,16 @@ img {
 .img-preview-box {
   cursor: grab;
 }
+
+.post-img-caption {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(26, 26, 26, 0.55);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
 .img-preview-close {
   position: fixed;
   top: 24px;
