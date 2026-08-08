@@ -122,6 +122,22 @@ img {
   .hero-inner { grid-template-columns: 1fr 1fr; }
 }
 
+/* Centered hero variant */
+.hero-inner-center {
+  grid-template-columns: 1fr;
+  text-align: center;
+}
+.hero-inner-center > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-inner-center .hero-desc {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .badge {
   display: inline-block;
   background: #facc15;

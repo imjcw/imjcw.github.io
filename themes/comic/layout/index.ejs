@@ -4,14 +4,18 @@
 %>
 
 <% if (hero.enable !== false) { %>
-<section class="hero">
-  <div class="hero-inner">
+<section class="hero hero-center">
+  <div class="hero-inner hero-inner-center">
     <div>
       <% if (hero.badge) { %>
         <span class="badge"><%= hero.badge %></span>
       <% } %>
-      <h1 class="hero-title"><%= hero.title || config.title %></h1>
-      <p class="hero-desc"><%= hero.description || config.description || '' %></p>
+      <% if (hero.title) { %>
+        <h1 class="hero-title"><%= hero.title %></h1>
+      <% } %>
+      <% if (hero.description || config.description) { %>
+        <p class="hero-desc"><%= hero.description || config.description %></p>
+      <% } %>
       <% if (hero.buttons && hero.buttons.length > 0) { %>
         <div class="hero-buttons">
           <% hero.buttons.forEach(function(btn) { %>
@@ -20,15 +24,6 @@
         </div>
       <% } %>
     </div>
-    <% if (hero.quote || config.subtitle) { %>
-      <div class="hero-bubble-wrap">
-        <div class="hero-bubble">
-          <p class="hero-bubble-text">
-            "<%= hero.quote || config.subtitle %>"
-          </p>
-        </div>
-      </div>
-    <% } %>
   </div>
 </section>
 <% } %>
