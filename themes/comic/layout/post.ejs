@@ -124,7 +124,6 @@
       var panX = 0, panY = 0;
       var isPanning = false;
       var panStartX = 0, panStartY = 0;
-      var spacePressed = false;
       var initialized = false;
 
       function build() {
@@ -199,7 +198,7 @@
           isPanning = true;
           panStartX = e.clientX - panX;
           panStartY = e.clientY - panY;
-          imgEl.style.cursor = 'grabbing';
+          applyTransform();
         });
 
         document.addEventListener('mousemove', function (e) {
@@ -212,33 +211,16 @@
         document.addEventListener('mouseup', function () {
           if (isPanning) {
             isPanning = false;
-            imgEl.style.cursor = spacePressed ? 'grab' : 'pointer';
+            applyTransform();
           }
         });
 
         document.addEventListener('keydown', function (e) {
           if (!overlay || !overlay.classList.contains('visible')) return;
           if (e.key === 'Escape') { close(); return; }
-          if (e.code === 'Space') {
-            e.preventDefault();
-            if (!spacePressed) {
-              spacePressed = true;
-              imgEl.style.cursor = 'grab';
-              box.style.cursor = 'grab';
-            }
-          }
           if (e.key === '+' || e.key === '=') { applyZoom(0.2, innerWidth / 2, innerHeight / 2); }
           if (e.key === '-') { applyZoom(-0.2, innerWidth / 2, innerHeight / 2); }
-          if (e.key === '0' || e.key === '1' && e.shiftKey) { /* reset on 0 handled below */ }
           if (e.key === '0') { reset(); }
-        });
-
-        document.addEventListener('keyup', function (e) {
-          if (e.code === 'Space') {
-            spacePressed = false;
-            imgEl.style.cursor = scale > 1 ? 'grab' : 'pointer';
-            box.style.cursor = scale > 1 ? 'grab' : '';
-          }
         });
 
         initialized = true;
@@ -262,13 +244,8 @@
         imgEl.style.transform = 'scale(' + scale + ') translate(' + (panX / scale) + 'px, ' + (panY / scale) + 'px)';
         imgEl.style.transformOrigin = 'center center';
         zoomLabel.textContent = Math.round(scale * 100) + '%';
-        if (scale > 1 && !spacePressed) {
-          imgEl.style.cursor = 'grab';
-          box.style.cursor = 'grab';
-        } else {
-          imgEl.style.cursor = 'pointer';
-          box.style.cursor = '';
-        }
+        imgEl.style.cursor = isPanning ? 'grabbing' : 'grab';
+        box.style.cursor = isPanning ? 'grabbing' : 'grab';
       }
 
       function reset() {
@@ -285,7 +262,6 @@
         scale = 1;
         panX = 0;
         panY = 0;
-        spacePressed = false;
         applyTransform();
         overlay.classList.add('visible');
         document.body.style.overflow = 'hidden';

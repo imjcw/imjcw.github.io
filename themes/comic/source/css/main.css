@@ -1007,7 +1007,10 @@ img {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease;
-  cursor: pointer;
+  cursor: grab;
+}
+.img-preview-overlay:active {
+  cursor: grabbing;
 }
 .img-preview-overlay.visible {
   opacity: 1;
@@ -1032,6 +1035,10 @@ img {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   user-select: none;
   -webkit-user-drag: none;
+  cursor: grab;
+}
+.img-preview-box {
+  cursor: grab;
 }
 .img-preview-close {
   position: fixed;
