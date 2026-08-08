@@ -1,72 +1,57 @@
 <%
   var meta = theme.post_meta || {};
 %>
-<main class="py-14 px-6 md:px-8 lg:px-12">
-  <div class="max-w-4xl mx-auto">
-    <% if (page.categories.length > 0) { %>
-      <div class="flex flex-wrap gap-2 mb-4">
-        <% page.categories.each(function(cate) { %>
-          <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
-            <%= cate.name %>
-          </span>
-        <% }); %>
-      </div>
-    <% } %>
-
-    <h1 class="text-3xl md:text-5xl font-black uppercase tracking-tight leading-tight">
-      <%= page.title %>
-    </h1>
-
-    <div class="mt-4 flex items-center gap-3 text-sm font-bold text-[#1a1a1a]/70 flex-wrap">
-      <% if (meta.show_author) { %>
-        <span>作者：<%= page.author || config.author %></span>
-      <% } %>
-      <% if (meta.show_date) { %>
-        <span>·</span>
-        <span><%- date(page.date, config.date_format) %></span>
-      <% } %>
-      <% if (page.updated && meta.show_date && page.updated.toString() !== page.date.toString()) { %>
-        <span>·</span>
-        <span>更新于 <%- date(page.updated, config.date_format) %></span>
-      <% } %>
-    </div>
-
-    <% if (page.tags.length > 0) { %>
-    <div class="mt-4 flex gap-2 flex-wrap">
-      <% page.tags.each(function(tag) { %>
-        <a href="<%- url_for(tag.path) %>"
-           class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:bg-[#ef4444] hover:text-white transition-colors">
-          #<%= tag.name %>
-        </a>
+<main class="post-page">
+  <% if (page.categories.length > 0) { %>
+    <div class="post-category-tags">
+      <% page.categories.each(function(cate) { %>
+        <span class="card-tag"><%= cate.name %></span>
       <% }); %>
     </div>
+  <% } %>
+
+  <h1 class="post-title"><%= page.title %></h1>
+
+  <div class="post-meta">
+    <% if (meta.show_author !== false) { %>
+      <span>作者：<%= page.author || config.author %></span>
     <% } %>
-
-    <article class="mt-12 space-y-6 leading-relaxed text-[#1a1a1a]/85 font-bold text-base">
-      <%- page.content %>
-    </article>
-
-    <% if (page.prev || page.next) { %>
-    <div class="mt-16 pt-8 border-t-4 border-[#1a1a1a] grid grid-cols-1 md:grid-cols-2 gap-6">
-      <% if (page.prev) { %>
-      <a href="<%- url_for(page.prev.path) %>"
-         class="group bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 p-4 md:p-5">
-        <div class="text-xs font-black uppercase tracking-wide text-[#1a1a1a]/60">← 上一篇</div>
-        <div class="mt-1 text-sm font-black uppercase tracking-tight group-hover:opacity-90">
-          <%= page.prev.title %>
-        </div>
-      </a>
-      <% } %>
-      <% if (page.next) { %>
-      <a href="<%- url_for(page.next.path) %>"
-         class="group bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 p-4 md:p-5 md:text-right">
-        <div class="text-xs font-black uppercase tracking-wide text-[#1a1a1a]/60">下一篇 →</div>
-        <div class="mt-1 text-sm font-black uppercase tracking-tight group-hover:opacity-90">
-          <%= page.next.title %>
-        </div>
-      </a>
-      <% } %>
-    </div>
+    <% if (meta.show_date !== false) { %>
+      <span>·</span>
+      <span><%- date(page.date, config.date_format) %></span>
+    <% } %>
+    <% if (page.updated && meta.show_date !== false && page.updated.toString() !== page.date.toString()) { %>
+      <span>·</span>
+      <span>更新于 <%- date(page.updated, config.date_format) %></span>
     <% } %>
   </div>
+
+  <% if (page.tags.length > 0) { %>
+    <div class="post-tags">
+      <% page.tags.each(function(tag) { %>
+        <a href="<%- url_for(tag.path) %>" class="tag-pill">#<%= tag.name %></a>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <article class="post-content">
+    <%- page.content %>
+  </article>
+
+  <% if (page.prev || page.next) { %>
+    <div class="post-nav">
+      <% if (page.prev) { %>
+        <a href="<%- url_for(page.prev.path) %>" class="post-nav-card">
+          <div class="post-nav-label">← 上一篇</div>
+          <div class="post-nav-title"><%= page.prev.title %></div>
+        </a>
+      <% } %>
+      <% if (page.next) { %>
+        <a href="<%- url_for(page.next.path) %>" class="post-nav-card post-nav-next">
+          <div class="post-nav-label">下一篇 →</div>
+          <div class="post-nav-title"><%= page.next.title %></div>
+        </a>
+      <% } %>
+    </div>
+  <% } %>
 </main>

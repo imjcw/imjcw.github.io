@@ -11,17 +11,5 @@
   <meta name="description" content="<%= page.description || config.description %>">
   <meta name="author" content="<%= page.author || config.author %>">
   <meta name="keywords" content="<%= config.keywords || '' %>">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;700;900&display=swap');
-    body { font-family: 'Inter', sans-serif; font-weight: 700; }
-    h1, h2, h3 { font-family: 'Archivo Black', sans-serif; }
-    /* Code block styling */
-    pre { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-weight: 400 !important; }
-    code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-weight: 400 !important; }
-    /* Smooth scroll */
-    html { scroll-behavior: smooth; }
-    /* Selection color */
-    ::selection { background: #facc15; color: #1a1a1a; }
-  </style>
+  <link rel="stylesheet" href="<%- url_for('/css/main.css') %>">
 </head>

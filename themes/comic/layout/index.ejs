@@ -1,78 +1,56 @@
 <%
-  // Hero section config
   var hero = theme.hero || {};
   var index = theme.index || {};
 %>
 
 <% if (hero.enable !== false) { %>
-<section class="py-16 md:py-24 lg:py-32 px-4 md:px-8 lg:px-12">
-  <div class="max-w-6xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-      <div>
-        <% if (hero.badge) { %>
-        <span class="inline-flex bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-4 border-[#1a1a1a] rounded-lg px-4 py-1.5 text-sm shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] mb-6">
-          <%= hero.badge %>
-        </span>
-        <% } %>
-        <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight">
-          <%= hero.title || config.title %>
-        </h1>
-        <p class="text-[#1a1a1a]/70 text-sm mt-6 max-w-md font-bold leading-relaxed">
-          <%= hero.description || config.description || '' %>
-        </p>
-        <% if (hero.buttons && hero.buttons.length > 0) { %>
-        <div class="mt-10 flex items-center gap-4 flex-wrap">
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <% if (hero.badge) { %>
+        <span class="badge"><%= hero.badge %></span>
+      <% } %>
+      <h1 class="hero-title"><%= hero.title || config.title %></h1>
+      <p class="hero-desc"><%= hero.description || config.description || '' %></p>
+      <% if (hero.buttons && hero.buttons.length > 0) { %>
+        <div class="hero-buttons">
           <% hero.buttons.forEach(function(btn) { %>
-          <a href="<%- url_for(btn.url) %>"
-             class="inline-block bg-[#ef4444] text-white font-black uppercase tracking-wide border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 px-6 py-3 text-sm">
-            <%= btn.text %>
-          </a>
+            <a href="<%- url_for(btn.url) %>" class="btn btn-red"><%= btn.text %></a>
           <% }); %>
         </div>
-        <% } %>
-      </div>
-      <div class="bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] p-6 relative"
-           style="background-image: radial-gradient(circle 1.5px, rgba(26,26,26,0.12) 0%, transparent 100%); background-size: 8px 8px;">
-        <div class="bg-white border-4 border-[#1a1a1a] rounded-2xl p-6 shadow-[4px_4px_0px_0px_rgba(26,26,26,1)]">
-          <p class="font-black uppercase tracking-tight text-lg italic leading-relaxed">
-            "<%= hero.quote || config.subtitle || '每一页都是分镜，每一格都是一次冒险。' %>"
-          </p>
-        </div>
+      <% } %>
+    </div>
+    <div class="hero-bubble-wrap">
+      <div class="hero-bubble">
+        <p class="hero-bubble-text">
+          "<%= hero.quote || config.subtitle || '每一页都是分镜，每一格都是一次冒险。' %>"
+        </p>
       </div>
     </div>
   </div>
 </section>
 <% } %>
 
-<section class="py-16 md:py-24 lg:py-32 px-4 md:px-8 lg:px-12">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex items-center justify-between mb-12">
-      <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight">
-        <%= index.section_title || '新连载!' %>
-      </h2>
-      <% if (index.full_catalog_url) { %>
-      <a href="<%- url_for(index.full_catalog_url) %>"
-         class="inline-block bg-[#fffef0] text-[#1a1a1a] font-black uppercase tracking-wide border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 px-5 py-2.5 text-sm">
-        完整目录
-      </a>
-      <% } %>
-    </div>
+<div class="section-head">
+  <h2 class="section-title"><%= index.section_title || '新连载!' %></h2>
+  <% if (index.full_catalog_url) { %>
+    <a href="<%- url_for(index.full_catalog_url) %>" class="btn btn-cream">完整目录</a>
+  <% } %>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<main class="main">
+  <div class="main-inner">
+    <div class="card-grid">
       <% page.posts.each(function(post) { %>
-        <article class="group bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 p-4 md:p-6">
-          <div class="p-6 md:p-8">
-            <% if (post.categories.length > 0 && index.show_category) { %>
-              <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
-                <%- post.categories.first().name %>
-              </span>
+        <article class="card">
+          <div class="card-body">
+            <% if (post.categories.length > 0 && index.show_category !== false) { %>
+              <span class="card-tag"><%- post.categories.first().name %></span>
             <% } %>
-            <h3 class="mt-3 text-lg font-black uppercase tracking-tight leading-tight">
-              <a href="<%- url_for(post.path) %>" class="hover:opacity-90 transition-opacity">
-                <%= post.title %>
-              </a>
+            <h3 class="card-title">
+              <a href="<%- url_for(post.path) %>"><%= post.title %></a>
             </h3>
-            <p class="mt-3 text-[#1a1a1a]/70 text-sm font-bold leading-relaxed">
+            <p class="card-excerpt">
               <% var excerpt = '' %>
               <% if (post.excerpt) { %>
                 <% excerpt = strip_html(post.excerpt).substr(0, 100) %>
@@ -81,20 +59,17 @@
               <% } %>
               <%- excerpt %><% if (excerpt.length >= 100) { %>...<% } %>
             </p>
-            <div class="mt-4 flex items-center gap-3 text-xs font-bold text-[#1a1a1a]/60">
+            <div class="card-meta">
               <span><%- date(post.date, config.date_format) %></span>
               <span>·</span>
               <span><%= post.content ? Math.ceil(post.content.length / 400) : 5 %> 分钟</span>
             </div>
-            <% if (post.tags.length > 0 && index.show_tags) { %>
-            <div class="mt-3 flex gap-2 flex-wrap">
-              <% post.tags.each(function(tag) { %>
-                <a href="<%- url_for(tag.path) %>"
-                   class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:bg-[#ef4444] hover:text-white transition-colors">
-                  #<%= tag.name %>
-                </a>
-              <% }); %>
-            </div>
+            <% if (post.tags.length > 0 && index.show_tags !== false) { %>
+              <div class="card-tags">
+                <% post.tags.each(function(tag) { %>
+                  <a href="<%- url_for(tag.path) %>" class="tag-pill">#<%= tag.name %></a>
+                <% }); %>
+              </div>
             <% } %>
           </div>
         </article>
@@ -102,38 +77,13 @@
     </div>
 
     <% if (page.total > page.per_page) { %>
-    <div class="mt-16 flex justify-center">
-      <%- paginator({
-        prev_text: '← 上一页',
-        next_text: '下一页 →',
-        mid_surround: 2
-      }) %>
-    </div>
-    <style>
-      .pagination { display: flex; align-items: center; gap: 4px; }
-      .pagination a, .pagination span {
-        display: inline-block;
-        font-family: 'Archivo Black', sans-serif;
-        font-size: 14px;
-        font-weight: 900;
-        padding: 10px 16px;
-        border: 3px solid #1a1a1a;
-        background: #fffef0;
-        color: #1a1a1a;
-        text-decoration: none;
-        box-shadow: 4px 4px 0px 0px rgba(26,26,26,1);
-        transition: all 0.15s;
-      }
-      .pagination a:hover {
-        transform: translate(2px, 2px);
-        box-shadow: 2px 2px 0px 0px rgba(26,26,26,1);
-      }
-      .pagination .page-number.current {
-        background: #ef4444;
-        color: white;
-      }
-      .pagination .extend { color: #1a1a1a; }
-    </style>
+      <div class="pagination-wrap">
+        <%- paginator({
+          prev_text: '← 上一页',
+          next_text: '下一页 →',
+          mid_surround: 2
+        }) %>
+      </div>
     <% } %>
   </div>
-</section>
+</main>

@@ -1,32 +1,18 @@
-<%
-  var tagsDesc = theme.tags.description || '按标签浏览所有文章';
-%>
-
-<section class="py-16 md:py-20 px-6 md:px-8 lg:px-12">
-  <div class="max-w-3xl mx-auto text-center">
-    <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
-      TAGS
-    </span>
-    <h1 class="mt-6 text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight">
-      所有标签
-    </h1>
-    <p class="mt-5 text-[#1a1a1a]/70 text-sm font-bold leading-relaxed max-w-xl mx-auto">
-      <%= tagsDesc %>
-    </p>
+<section class="page-header">
+  <div class="page-header-inner">
+    <span class="badge">TAGS</span>
+    <h1 class="page-header-title">所有标签</h1>
+    <p class="page-header-desc"><%= theme.tags.description || '按标签浏览所有文章' %></p>
   </div>
 </section>
 
-<main class="py-12 px-6 md:px-8 lg:px-12">
-  <div class="max-w-4xl mx-auto text-center">
-    <div class="flex flex-wrap justify-center gap-2">
-      <% site.tags.sort(function(a, b) { return b.posts.length - a.posts.length; }).each(function(tag) { %>
-        <a href="<%- url_for(tag.path) %>"
-           class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-black uppercase tracking-wide border-3 border-[#1a1a1a] shadow-[3px_3px_0px_0px_rgba(26,26,26,1)] transition-all duration-150
-                  bg-[#facc15] text-[#1a1a1a] hover:bg-[#ef4444] hover:text-white hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(26,26,26,1)]">
-          <span>#<%= tag.name %></span>
-          <span class="bg-white/30 px-1.5 py-0.5 rounded text-[10px]"><%= tag.posts.length %></span>
-        </a>
-      <% }); %>
-    </div>
+<main class="main">
+  <div class="tag-cloud">
+    <% site.tags.sort(function(a, b) { return b.posts.length - a.posts.length; }).each(function(tag) { %>
+      <a href="<%- url_for(tag.path) %>" class="tag-cloud-item">
+        <span>#<%= tag.name %></span>
+        <span class="tag-cloud-count"><%= tag.posts.length %></span>
+      </a>
+    <% }); %>
   </div>
 </main>

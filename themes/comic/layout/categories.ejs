@@ -1,37 +1,23 @@
-<%
-  var categoriesDesc = theme.categories.description || '按分类浏览所有文章';
-%>
-
-<section class="py-16 md:py-20 px-6 md:px-8 lg:px-12">
-  <div class="max-w-3xl mx-auto text-center">
-    <span class="inline-block bg-[#facc15] text-[#1a1a1a] font-black uppercase tracking-wide border-2 border-[#1a1a1a] rounded px-2 py-0.5 text-xs shadow-[2px_2px_0px_0px_rgba(26,26,26,1)]">
-      CATEGORIES
-    </span>
-    <h1 class="mt-6 text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight">
-      全部分类
-    </h1>
-    <p class="mt-5 text-[#1a1a1a]/70 text-sm font-bold leading-relaxed max-w-xl mx-auto">
-      <%= categoriesDesc %>
-    </p>
+<section class="page-header">
+  <div class="page-header-inner">
+    <span class="badge">CATEGORIES</span>
+    <h1 class="page-header-title">全十分类</h1>
+    <p class="page-header-desc"><%= theme.categories.description || '按分类浏览所有文章' %></p>
   </div>
 </section>
 
-<main class="py-12 px-6 md:px-8 lg:px-12">
-  <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<main class="main">
+  <div class="cat-grid">
     <% site.categories.each(function(cate) { %>
-      <a href="<%- url_for(cate.path) %>"
-         class="group bg-[#fffef0] border-4 border-[#1a1a1a] rounded-lg shadow-[4px_4px_0px_0px_rgba(26,26,26,1)] hover:shadow-[2px_2px_0px_0px_rgba(26,26,26,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-150 p-5 md:p-6">
-        <div class="flex items-center justify-between">
-          <h3 class="text-lg font-black uppercase tracking-tight group-hover:opacity-90">
-            <%= cate.name %>
-          </h3>
-          <span class="text-3xl font-black text-[#ef4444]"><%= cate.posts.length %></span>
+      <a href="<%- url_for(cate.path) %>" class="cat-card">
+        <div class="cat-card-head">
+          <h3 class="cat-card-title"><%= cate.name %></h3>
+          <span class="cat-card-count"><%= cate.posts.length %></span>
         </div>
         <% if (cate.posts.length > 0) { %>
-          <p class="mt-3 text-xs font-bold text-[#1a1a1a]/60">
-            <% var latest = cate.posts.first(); if (latest) { %>
-              最新：<%= latest.title.length > 20 ? latest.title.substr(0, 20) + '...' : latest.title %>
-            <% } %>
+          <% var latest = cate.posts.first(); %>
+          <p class="cat-card-latest">
+            最新：<%= latest.title.length > 20 ? latest.title.substr(0, 20) + '...' : latest.title %>
           </p>
         <% } %>
       </a>
