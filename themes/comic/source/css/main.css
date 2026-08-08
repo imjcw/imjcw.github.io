@@ -1007,7 +1007,7 @@ img {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease;
-  cursor: zoom-out;
+  cursor: pointer;
 }
 .img-preview-overlay.visible {
   opacity: 1;

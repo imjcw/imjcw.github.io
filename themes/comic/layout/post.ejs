@@ -194,12 +194,12 @@
         }, { passive: false });
 
         overlay.addEventListener('mousedown', function (e) {
-          if (e.target === overlay || e.target.classList.contains('img-preview-img')) {
-            isPanning = true;
-            panStartX = e.clientX - panX;
-            panStartY = e.clientY - panY;
-            imgEl.style.cursor = 'grabbing';
-          }
+          if (e.target.closest('.img-preview-controls')) return;
+          if (e.target.classList.contains('img-preview-close')) return;
+          isPanning = true;
+          panStartX = e.clientX - panX;
+          panStartY = e.clientY - panY;
+          imgEl.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', function (e) {
@@ -212,7 +212,7 @@
         document.addEventListener('mouseup', function () {
           if (isPanning) {
             isPanning = false;
-            imgEl.style.cursor = spacePressed ? 'grab' : 'zoom-out';
+            imgEl.style.cursor = spacePressed ? 'grab' : 'pointer';
           }
         });
 
@@ -236,7 +236,7 @@
         document.addEventListener('keyup', function (e) {
           if (e.code === 'Space') {
             spacePressed = false;
-            imgEl.style.cursor = scale > 1 ? 'grab' : 'zoom-out';
+            imgEl.style.cursor = scale > 1 ? 'grab' : 'pointer';
             box.style.cursor = scale > 1 ? 'grab' : '';
           }
         });
@@ -247,30 +247,26 @@
       function applyZoom(delta, cx, cy) {
         var newScale = Math.max(0.1, Math.min(10, scale + delta));
         if (newScale === scale) return;
-        // Zoom toward cursor
         var oldScale = scale;
         scale = newScale;
         var factor = scale / oldScale;
-        panX = cx - (cx - panX) * factor;
-        panY = cy - (cy - panY) * factor;
+        var cxRel = cx - innerWidth / 2;
+        var cyRel = cy - innerHeight / 2;
+        panX = cxRel * (1 - factor) + factor * panX;
+        panY = cyRel * (1 - factor) + factor * panY;
         applyTransform();
       }
 
       function applyTransform() {
         if (!imgEl) return;
-        var cs = imgEl.ownerDocument.defaultView.getComputedStyle(imgEl);
-        var tw = 12;
         imgEl.style.transform = 'scale(' + scale + ') translate(' + (panX / scale) + 'px, ' + (panY / scale) + 'px)';
         imgEl.style.transformOrigin = 'center center';
         zoomLabel.textContent = Math.round(scale * 100) + '%';
-
-        // Show/hide pan affordance
         if (scale > 1 && !spacePressed) {
           imgEl.style.cursor = 'grab';
           box.style.cursor = 'grab';
-        }
-        if (scale <= 1) {
-          imgEl.style.cursor = 'zoom-out';
+        } else {
+          imgEl.style.cursor = 'pointer';
           box.style.cursor = '';
         }
       }
