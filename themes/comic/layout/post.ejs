@@ -20,10 +20,6 @@
       <span>·</span>
       <span><%- date(page.date, config.date_format) %></span>
     <% } %>
-    <% if (page.updated && meta.show_date !== false && page.updated.toString() !== page.date.toString()) { %>
-      <span>·</span>
-      <span>更新于 <%- date(page.updated, config.date_format) %></span>
-    <% } %>
   </div>
 
   <% if (page.tags.length > 0) { %>
