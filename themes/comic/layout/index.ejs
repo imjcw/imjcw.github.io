@@ -28,52 +28,59 @@
 </section>
 <% } %>
 
-<div class="section-head">
-  <h2 class="section-title"><%= index.section_title || '新连载!' %></h2>
-  <% if (index.full_catalog_url) { %>
-    <a href="<%- url_for(index.full_catalog_url) %>" class="btn btn-cream">完整目录</a>
-  <% } %>
-</div>
-
 <main class="main">
   <div class="main-inner">
-    <div class="card-grid">
+    <div class="post-list">
       <% page.posts.each(function(post) { %>
-        <article class="card">
-          <div class="card-body">
+        <article class="post-list-item">
+          <div class="post-list-left">
+            <div class="post-list-date">
+              <span class="post-list-day"><%= post.date.date().toString().padStart(2, '0') %></span>
+              <span class="post-list-year"><%= post.date.year() %></span>
+            </div>
             <% if (post.categories.length > 0 && index.show_category !== false) { %>
               <span class="card-tag"><%- post.categories.first().name %></span>
             <% } %>
+          </div>
+          <div class="post-list-right">
             <h3 class="card-title">
               <a href="<%- url_for(post.path) %>"><%= post.title %></a>
             </h3>
             <p class="card-excerpt">
               <% var excerpt = '' %>
               <% if (post.excerpt) { %>
-                <% excerpt = strip_html(post.excerpt).substr(0, 100) %>
+                <% excerpt = strip_html(post.excerpt).substr(0, 120) %>
               <% } else { %>
-                <% excerpt = strip_html(post.content).substr(0, 100) %>
+                <% excerpt = strip_html(post.content).substr(0, 120) %>
               <% } %>
-              <%- excerpt %><% if (excerpt.length >= 100) { %>...<% } %>
+              <%- excerpt %><% if (excerpt.length >= 120) { %>...<% } %>
             </p>
             <div class="card-meta">
-              <span><%- date(post.date, config.date_format) %></span>
-              <span>·</span>
               <span><%= post.content ? Math.ceil(post.content.length / 400) : 5 %> 分钟</span>
+              <% if (post.tags.length > 0 && index.show_tags !== false) { %>
+                <span class="post-list-tags">
+                  <% post.tags.each(function(tag) { %>
+                    <a href="<%- url_for(tag.path) %>" class="tag-pill">#<%= tag.name %></a>
+                  <% }); %>
+                </span>
+              <% } %>
             </div>
-            <% if (post.tags.length > 0 && index.show_tags !== false) { %>
-              <div class="card-tags">
-                <% post.tags.each(function(tag) { %>
-                  <a href="<%- url_for(tag.path) %>" class="tag-pill">#<%= tag.name %></a>
-                <% }); %>
-              </div>
-            <% } %>
           </div>
         </article>
       <% }); %>
     </div>
 
-    <% if (page.total > page.per_page) { %>
+    <% var hasNext = false; %>
+<% if (typeof config.index_generator !== 'undefined' && config.index_generator && config.index_generator.per_page) { %>
+  <% var pp = config.index_generator.per_page; %>
+<% } else if (config.per_page) { %>
+  <% var pp = config.per_page; %>
+<% } else { %>
+  <% var pp = 10; %>
+<% } %>
+<% if (page.posts && page.posts.length >= pp) { hasNext = true; } %>
+
+<% if (hasNext || (page.current && page.current > 1)) { %>
       <div class="pagination-wrap">
         <%- paginator({
           prev_text: '← 上一页',

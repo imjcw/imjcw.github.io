@@ -54,4 +54,45 @@
       <% } %>
     </div>
   <% } %>
+
+  <% if (page.content && (page.content.indexOf('flowchart ') > -1 || page.content.indexOf('sequenceDiagram') > -1 || page.content.indexOf('classDiagram') > -1 || page.content.indexOf('gantt') > -1 || page.content.indexOf('stateDiagram') > -1 || page.content.indexOf('erDiagram') > -1 || page.content.indexOf('gitGraph') > -1 || page.content.indexOf('pie') > -1)) { %>
+    <script src="<%- url_for('/js/mermaid.min.js') %>"></script>
+    <script src="<%- url_for('/js/render-mermaid.js') %>"></script>
+  <% } %>
+
+  <script>
+    (function () {
+      var article = document.querySelector('.post-content');
+      if (!article) return;
+
+      // Add real copy button element
+      article.querySelectorAll('figure.highlight').forEach(function (fig) {
+        var btn = document.createElement('span');
+        btn.className = 'code-copy-btn';
+        btn.setAttribute('title', '复制代码');
+        fig.appendChild(btn);
+      });
+
+      article.addEventListener('click', function (e) {
+        var btn = e.target.closest ? e.target.closest('.code-copy-btn') : null;
+        if (!btn) return;
+        var fig = btn.parentElement;
+        var pre = fig.querySelector('pre');
+        if (!pre) return;
+        navigator.clipboard.writeText(pre.innerText || pre.textContent).then(function () {
+          var old = fig.querySelector('.code-copy-bubble');
+          if (old) old.remove();
+          var bubble = document.createElement('span');
+          bubble.className = 'code-copy-bubble';
+          bubble.textContent = '已复制';
+          fig.appendChild(bubble);
+          requestAnimationFrame(function () { bubble.classList.add('show'); });
+          setTimeout(function () {
+            bubble.classList.remove('show');
+            setTimeout(function () { bubble.remove(); }, 200);
+          }, 1200);
+        }).catch(function () {});
+      });
+    })();
+  </script>
 </main>
