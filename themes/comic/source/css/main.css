@@ -133,9 +133,14 @@ img {
   align-items: center;
 }
 .hero-inner-center .hero-desc {
-  max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+  color: #1a1a1a;
+  max-width: none;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .badge {
