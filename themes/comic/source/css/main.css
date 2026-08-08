@@ -1384,9 +1384,6 @@ img {
   border-radius: 8px;
   background: #fffef0;
   box-shadow: 4px 4px 0 0 #1a1a1a;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 .post-disclaimer-item {
   display: flex;
@@ -1415,8 +1412,8 @@ img {
   font-weight: 700;
   color: rgba(26, 26, 26, 0.6);
   font-style: italic;
-  padding-top: 6px;
-  border-top: 1px solid rgba(26, 26, 26, 0.15);
+  text-align: center;
+  line-height: 1.7;
 }
 .post-disclaimer-text a.cc-link {
   color: #ef4444;
