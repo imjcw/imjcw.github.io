@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/03/javascript/php-session-custom-manager/
 title: PHP SESSION 自定义会话管理器
 tags:
     - PHP

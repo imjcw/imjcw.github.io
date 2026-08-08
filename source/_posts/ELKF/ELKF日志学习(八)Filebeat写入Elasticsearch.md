@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/24/elkf/elk-log-learn-8-filebeat-elasticsearch/
 title: ELKF日志学习(八)Filebeat写入Elasticsearch
 tags:
     - ELK

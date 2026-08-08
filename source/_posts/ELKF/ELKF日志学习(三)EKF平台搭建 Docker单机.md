@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/19/elkf/elk-log-learn-3-setup-docker-single/
 title: ELKF日志学习(三)EKF平台搭建 Docker单机
 tags:
     - ELK

@@ -1,4 +1,5 @@
 ---
+permalink: 2019/07/14/javascript/promise-principle/
 title: Promise原理分析
 tags:
     - Promise

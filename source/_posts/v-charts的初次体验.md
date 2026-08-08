@@ -1,4 +1,5 @@
 ---
+permalink: 2019/08/13/javascript/v-charts-first-experience/
 title: v-charts的初次体验
 tags:
     - JavaScript

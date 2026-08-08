@@ -1,4 +1,5 @@
 ---
+permalink: 2021/03/16/mysql/pdo-bind-in-array/
 title: PDO 绑定IN()语句的Array变量
 tags:
     - PHP

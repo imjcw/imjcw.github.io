@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/28/elkf/elk-log-learn-12-kibana-basic/
 title: ELKF日志学习(十二)Kibana基础介绍
 tags:
     - ELK

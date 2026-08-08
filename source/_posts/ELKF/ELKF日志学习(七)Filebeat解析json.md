@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/23/elkf/elk-log-learn-7-filebeat-json/
 title: ELKF日志学习(七)Filebeat解析json
 tags:
     - ELK

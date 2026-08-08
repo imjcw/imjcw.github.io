@@ -1,4 +1,5 @@
 ---
+permalink: 2020/10/09/git/git-tag/
 title: Git Tag相关
 tags:
     - Git

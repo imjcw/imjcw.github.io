@@ -1,4 +1,5 @@
 ---
+permalink: 2020/11/04/php/lumen-generate-pdf/
 title: Lumen生成PDF
 tags:
     - Laravel

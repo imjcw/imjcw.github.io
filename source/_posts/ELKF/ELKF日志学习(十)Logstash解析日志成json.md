@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/26/elkf/elk-log-learn-10-logstash-json/
 title: ELKF日志学习(十)Logstash解析日志成json
 tags:
     - ELK

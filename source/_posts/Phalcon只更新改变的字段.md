@@ -1,4 +1,5 @@
 ---
+permalink: 2017/05/13/php/phalcon-update-changed-fields/
 title: Phalcon只更新改变的字段
 tags:
     - PHP

@@ -1,4 +1,5 @@
 ---
+permalink: 2020/10/26/tools/typora-image-bed/
 title: Typora使用图床
 tags:
     - Typora

@@ -1,4 +1,5 @@
 ---
+permalink: 2020/06/18/system/cas-sso-flow/
 title: CAS单点登录流程梳理
 tags:
     - CAS

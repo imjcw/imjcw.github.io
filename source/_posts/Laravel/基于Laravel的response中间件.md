@@ -1,4 +1,5 @@
 ---
+permalink: 2020/11/03/laravel/laravel-response-middleware/
 title: 基于Laravel的response中间件
 tags:
     - Laravel

@@ -1,4 +1,5 @@
 ---
+permalink: 2021/02/26/php/laravel-log-split/
 title: Laravel日志分割
 tags:
     - Laravel

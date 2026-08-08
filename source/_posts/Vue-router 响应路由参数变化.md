@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/03/javascript/vue-router-route-param-change/
 title: Vue-router 响应路由参数变化
 tags:
     - JavaScript

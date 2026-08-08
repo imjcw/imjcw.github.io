@@ -1,4 +1,5 @@
 ---
+permalink: 2019/02/13/shadowsocks/cli-shadowsocks-config/
 title: 命令行Shadowsocks配置
 tags:
     - Shadowsocks

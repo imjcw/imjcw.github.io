@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/22/elkf/elk-log-learn-6-filebeat-filter/
 title: ELKF日志学习(六)FileBeat过滤日志
 tags:
     - ELK

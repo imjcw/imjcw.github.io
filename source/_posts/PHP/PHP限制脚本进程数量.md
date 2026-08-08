@@ -1,4 +1,5 @@
 ---
+permalink: 2021/03/03/php/php-limit-script-processes/
 title: PHP 限制脚本进程数量
 tags:
     - PHP

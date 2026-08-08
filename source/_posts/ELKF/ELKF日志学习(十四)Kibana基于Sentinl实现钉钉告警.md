@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/30/elkf/elk-log-learn-14-kibana-sentinl-dingtalk/
 title: ELKF日志学习(十四)Kibana基于Sentinl实现钉钉告警
 tags:
     - ELK

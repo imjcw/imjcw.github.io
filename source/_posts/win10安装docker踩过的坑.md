@@ -1,4 +1,5 @@
 ---
+permalink: 2020/10/13/docker/win10-install-docker-pitfalls/
 title: win10安装docker踩过的坑
 tags:
     - Docker

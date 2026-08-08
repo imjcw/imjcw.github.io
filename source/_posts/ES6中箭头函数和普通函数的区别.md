@@ -1,4 +1,5 @@
 ---
+permalink: 2019/05/13/javascript/es6-arrow-vs-normal-function/
 title: ES6中箭头函数和普通函数的区别
 tags:
     - JavaScript

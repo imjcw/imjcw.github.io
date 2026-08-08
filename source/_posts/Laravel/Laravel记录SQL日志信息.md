@@ -1,4 +1,5 @@
 ---
+permalink: 2020/11/09/php/laravel-sql-log/
 title: Laravel记录SQL日志信息
 tags:
     - Laravel

@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/21/elkf/elk-log-learn-5-filebeat-multiline/
 title: ELKF日志学习(五)FileBeat解析多行日志
 tags:
     - ELK

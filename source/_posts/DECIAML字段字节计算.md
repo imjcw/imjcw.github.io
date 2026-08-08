@@ -1,4 +1,5 @@
 ---
+permalink: 2018/06/13/mysql/decimal-field-byte-calc/
 title: DECIAML字段字节计算
 tags:
     - MySQL

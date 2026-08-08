@@ -1,4 +1,5 @@
 ---
+permalink: 2019/06/13/javascript/es6-object-merge/
 title: ES6对象的合并
 tags:
     - JavaScript

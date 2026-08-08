@@ -1,4 +1,5 @@
 ---
+permalink: 2018/05/13/linux/ubuntu-install-phpize/
 title: Ubuntu安装phpize
 tags:
     - PHP

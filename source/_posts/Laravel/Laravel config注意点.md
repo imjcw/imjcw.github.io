@@ -1,4 +1,5 @@
 ---
+permalink: 2020/11/02/laravel/laravel-config-notes/
 title: Laravel config注意点
 tags:
     - Laravel

@@ -1,4 +1,5 @@
 ---
+permalink: 2020/10/28/php/hyperf-hot-reload/
 title: Hyperf热更新
 tags:
     - PHP

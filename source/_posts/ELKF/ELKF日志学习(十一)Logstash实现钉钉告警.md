@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/27/elkf/elk-log-learn-11-logstash-dingtalk-alert/
 title: ELKF日志学习(十一)Logstash实现钉钉告警(莫当真)
 tags:
     - ELK

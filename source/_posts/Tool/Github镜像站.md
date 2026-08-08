@@ -1,4 +1,5 @@
 ---
+permalink: 2021/03/23/tool/github-mirror/
 title: Github镜像站
 tags:
     - Tool

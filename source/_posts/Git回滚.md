@@ -1,4 +1,5 @@
 ---
+permalink: 2020/10/09/git/git-rollback/
 title: Git回滚
 tags:
     - Git

@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/17/elkf/elk-log-learn-1-intro/
 title: ELKF日志学习(一)前言
 tags:
     - ELK

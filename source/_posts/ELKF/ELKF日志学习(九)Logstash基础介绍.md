@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/25/elkf/elk-log-learn-9-logstash-basic/
 title: ELKF日志学习(九)Logstash基础介绍
 tags:
     - ELK

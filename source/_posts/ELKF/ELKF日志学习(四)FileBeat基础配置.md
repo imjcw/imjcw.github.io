@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/20/elkf/elk-log-learn-4-filebeat-basic/
 title: ELKF日志学习(四)FileBeat基础配置
 tags:
     - ELK

@@ -1,4 +1,5 @@
 ---
+permalink: 2021/03/10/javascript/element-ui-upload-excel-preview/
 title: Element-ui获取上传的Excel并预览
 tags:
     - Javascript

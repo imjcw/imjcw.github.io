@@ -1,4 +1,5 @@
 ---
+permalink: 2020/12/29/elkf/elk-log-learn-13-kibana-sentinl-plugin/
 title: ELKF日志学习(十三)Kibana安装Sentinl插件
 tags:
     - ELK

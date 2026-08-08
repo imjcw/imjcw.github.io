@@ -1,4 +1,5 @@
 ---
+permalink: 2020/11/16/php/laravel-casts-type/
 title: Laravel使用Casts转换类型
 tags:
     - Laravel
