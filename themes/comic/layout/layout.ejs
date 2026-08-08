@@ -3,23 +3,25 @@
 <%- partial('_partial/head.ejs') %>
 <body>
   <div class="deco-star ds1" style="top:8%;left:6%;">✦</div>
-  <div class="deco-star ds2" style="top:15%;left:88%;">✧</div>
-  <div class="deco-star ds3" style="top:30%;left:3%;">✦</div>
-  <div class="deco-star ds4" style="top:42%;left:95%;">✧</div>
-  <div class="deco-star ds5" style="top:55%;left:10%;">✦</div>
-  <div class="deco-star ds6" style="top:65%;left:88%;">✧</div>
-  <div class="deco-star ds7" style="top:78%;left:5%;">✦</div>
-  <div class="deco-star ds8" style="top:88%;left:96%;">✧</div>
-  <div class="deco-star ds9" style="top:5%;left:45%;">✦</div>
-  <div class="deco-star ds10" style="top:92%;left:40%;">✧</div>
-  <div class="deco-star ds11" style="top:22%;left:70%;">✦</div>
-  <div class="deco-star ds12" style="top:72%;left:65%;">✧</div>
+  <div class="deco-star ds2" style="top:18%;left:90%;">✧</div>
+  <div class="deco-star ds3" style="top:40%;left:4%;">✦</div>
+  <div class="deco-star ds4" style="top:60%;left:94%;">✦</div>
+  <div class="deco-star ds5" style="top:82%;left:10%;">✧</div>
+  <div class="deco-star ds6" style="top:50%;left:48%;">✦</div>
 
   <script>
     (function () {
       var stars = document.querySelectorAll('.deco-star');
       if (!stars.length) return;
       var w = innerWidth, h = innerHeight;
+      var COLOR_SETS = [
+        [26, 26, 26],
+        [26, 26, 26],
+        [26, 26, 26],
+        [239, 68, 68],
+        [59, 130, 246],
+        [250, 204, 21]
+      ];
 
       function rand(min, max) {
         return Math.random() * (max - min) + min;
@@ -32,18 +34,23 @@
         star.style.opacity = '0';
         setTimeout(function () {
           star.style.transition = 'none';
-          star.style.left = rand(2, w - 30) + 'px';
-          star.style.top = rand(2, h - 30) + 'px';
-          star.style.fontSize = rand(18, 32) + 'px';
+          star.style.left = rand(3, w - 40) + 'px';
+          star.style.top = rand(3, h - 40) + 'px';
+          star.style.fontSize = rand(14, 22) + 'px';
           var rot = rand(-45, 45);
-          var b = rand(0.45, 0.85);
+          var b = rand(0.18, 0.35);
+          var c = COLOR_SETS[Math.floor(Math.random() * COLOR_SETS.length)];
           star.style.transform = 'rotate(' + rot + 'deg)';
-          star.style.color = 'rgba(26,26,26,' + b + ')';
-          star.style.opacity = '1';
+          star.style.color = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + b + ')';
+          star.style.opacity = '0';
+          requestAnimationFrame(function () {
+            star.style.transition = 'opacity 3s ease-in-out';
+            star.style.opacity = '1';
+          });
         }, 2500);
       }
 
-      setInterval(relocateOne, 4000);
+      setInterval(relocateOne, 5000);
     })();
   </script>
 

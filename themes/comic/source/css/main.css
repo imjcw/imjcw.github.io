@@ -161,12 +161,24 @@ img {
 .deco-star {
   position: fixed;
   pointer-events: none;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 1;
-  color: #1a1a1a;
+  color: rgba(26, 26, 26, 0.22);
   font-weight: 900;
-  opacity: 1;
+  opacity: 0;
   z-index: 9999;
+  animation: deco-star-fadein 3s ease-in-out forwards;
+}
+.deco-star.ds1 { animation-delay: 0.0s; }
+.deco-star.ds2 { animation-delay: 0.4s; }
+.deco-star.ds3 { animation-delay: 0.8s; }
+.deco-star.ds4 { animation-delay: 1.2s; }
+.deco-star.ds5 { animation-delay: 1.6s; }
+.deco-star.ds6 { animation-delay: 2.0s; }
+
+@keyframes deco-star-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .hero-inner {
