@@ -1,6 +1,6 @@
 <footer class="footer">
   <div class="footer-inner">
     <p class="footer-title"><%= config.title %></p>
-    <p class="footer-desc">© <%= theme.footer.copyright %> · <%= theme.footer.description || config.subtitle || '' %></p>
+    <p class="footer-desc">© <%= theme.footer.copyright %><% if (theme.footer.description || config.subtitle) { %> · <%= theme.footer.description || config.subtitle %><% } %></p>
   </div>
 </footer>

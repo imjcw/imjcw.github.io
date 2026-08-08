@@ -20,13 +20,15 @@
         </div>
       <% } %>
     </div>
-    <div class="hero-bubble-wrap">
-      <div class="hero-bubble">
-        <p class="hero-bubble-text">
-          "<%= hero.quote || config.subtitle || '每一页都是分镜，每一格都是一次冒险。' %>"
-        </p>
+    <% if (hero.quote || config.subtitle) { %>
+      <div class="hero-bubble-wrap">
+        <div class="hero-bubble">
+          <p class="hero-bubble-text">
+            "<%= hero.quote || config.subtitle %>"
+          </p>
+        </div>
       </div>
-    </div>
+    <% } %>
   </div>
 </section>
 <% } %>
