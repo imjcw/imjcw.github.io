@@ -15,8 +15,6 @@ hero:
   description: 小孩子的心思像星空，看的见却看不懂。
   quote:
   buttons:
-    - text: 归档
-      url: /archives
 
 # Homepage section title
 index:
