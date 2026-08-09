@@ -785,7 +785,8 @@ img {
 }
 
 .post-content tbody tr:hover td {
-  background: #facc15;
+  background: #dbeafe;
+  color: #1a1a1a;
 }
 
 /* ========== Post Content Table (End) ========== */
