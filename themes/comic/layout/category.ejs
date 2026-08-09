@@ -63,5 +63,15 @@
           </article>
         <% }); %>
     </div>
+
+    <% if (page.total > 1) { %>
+      <div class="pagination-wrap">
+        <%- paginator({
+          prev_text: '← 上一页',
+          next_text: '下一页 →',
+          mid_surround: 2
+        }) %>
+      </div>
+    <% } %>
   </div>
 </main>
