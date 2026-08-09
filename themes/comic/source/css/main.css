@@ -354,6 +354,10 @@ img {
   margin: 0 auto;
   text-align: center;
 }
+/* Wider header for tool pages (aligns with .main content area at 1200px) */
+.page-header-wide {
+  max-width: 1200px;
+}
 
 .page-header-title {
   margin-top: 24px;
