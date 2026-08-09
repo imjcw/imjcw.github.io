@@ -391,14 +391,14 @@
   position: fixed;
   top: 80px;
   right: 20px;
-  width: 220px;
+  width: 260px;
   max-height: calc(100vh - 160px);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  color: #333;
 }
 @media (max-width: 1200px) {
   .post-toc { display: none; }
@@ -410,21 +410,22 @@
 .post-toc-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  gap: 8px;
+  font-size: 16px;
   font-weight: 700;
-  color: #333;
+  color: #1a1a1a;
   line-height: 1;
+  padding: 4px 0;
 }
 .post-toc-header-title {
   flex: 0 0 auto;
 }
 .post-toc-header-actions {
   display: flex;
-  gap: 4px;
-  margin-left: 6px;
-  color: #999;
-  font-size: 13px;
+  gap: 6px;
+  margin-left: 4px;
+  color: #666;
+  font-size: 14px;
   line-height: 1;
 }
 .post-toc-header-actions span {
@@ -437,7 +438,7 @@
 
 .post-toc-list {
   position: relative;
-  padding: 8px 0 0 0;
+  padding: 12px 0 0 0;
   margin: 0;
   list-style: none;
   overflow-y: auto;
@@ -446,10 +447,10 @@
 
 .post-toc-item {
   display: block;
-  padding: 2px 0 2px 4px;
+  padding: 2px 0;
   font-size: 13px;
   font-weight: 400;
-  color: #999;
+  color: #666;
   text-decoration: none;
   line-height: 1.8;
   cursor: pointer;
@@ -461,7 +462,7 @@
 .post-toc-item:hover { color: #333; }
 .post-toc-item.active {
   color: #1a1a1a;
-  font-weight: 600;
+  font-weight: 700;
 }
 /* Arrow: ▼ when expanded, ▸ when collapsed */
 .post-toc-item .toc-arrow {
@@ -497,11 +498,11 @@
 .post-toc-children.active-section::before {
   content: '';
   position: absolute;
-  left: 12px;
-  top: 4px;
-  bottom: 4px;
+  left: 14px;
+  top: 6px;
+  bottom: 6px;
   width: 1px;
-  background: #d0d0d0;
+  background: #ccc;
 }
 .post-toc-children.collapsed { display: none; }
 
@@ -561,8 +562,8 @@
     <div class="post-toc-header">
       <span class="post-toc-header-title">大纲</span>
       <span class="post-toc-header-actions">
-        <span id="tocExpandAll" title="展开全部">◬</span>
-        <span id="tocCollapseAll" title="收起全部">☰</span>
+        <span id="tocCollapseAll" title="收起全部">⊘</span>
+        <span id="tocExpandAll" title="展开全部">☰</span>
       </span>
       <button class="toc-close-btn" id="tocCloseBtn">✕</button>
     </div>
