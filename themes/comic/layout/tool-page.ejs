@@ -37,7 +37,7 @@
           <div class="tool-bar">
             <button class="btn btn-cream btn-sm" id="tool-dl-svg" type="button" title="下载 SVG">SVG</button>
             <button class="btn btn-yellow btn-sm" id="tool-dl-png" type="button" title="下载 PNG">PNG</button>
-            <button class="btn btn-blue btn-sm" id="tool-zoom" type="button" title="放大预览">放大</button>
+            <button class="btn btn-blue btn-sm" id="tool-zoom" type="button" title="预览">预览</button>
           </div>
         </div>
         <div class="tool-preview-box" id="tool-output">
@@ -119,7 +119,7 @@
       if (old) old.remove();
       output.appendChild(container);
       lastSvg = container.querySelector('svg');
-      // Attach zoom behavior (reuse lightbox from render-mermaid.js)
+      // Click on chart to open preview (same behavior as blog post mermaid)
       container.addEventListener('click', function () {
         if (lastSvg && window.mermaidLightbox) window.mermaidLightbox.showDialog(lastSvg);
       });

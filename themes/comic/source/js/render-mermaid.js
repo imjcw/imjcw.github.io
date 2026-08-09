@@ -197,16 +197,39 @@
     cloned.removeAttribute('width');
     cloned.removeAttribute('height');
 
+    // Compute preview size from viewBox, with hard caps to avoid overflow.
+    // Never artificially enlarge — use natural dimensions so the diagram
+    // never appears "放大" relative to its actual content size.
     var vb = cloned.getAttribute('viewBox');
-    var w = 1100;
+    var vw, vh;
     if (vb) {
       var parts = vb.split(/[\s,]+/);
-      if (parts.length >= 3) {
-        var vw = parseFloat(parts[2]);
-        if (vw > 200 && vw < 2400) w = Math.min(Math.round(vw), 1160);
+      if (parts.length >= 4) {
+        vw = parseFloat(parts[2]);
+        vh = parseFloat(parts[3]);
       }
     }
-    cloned.style.cssText = 'width:' + w + 'px; height:auto; max-width:100%;';
+
+    var MAX_W = 1100, MAX_H = 600;
+    var w, h;
+    if (vw && vh && vw > 0 && vh > 0) {
+      var ratio = vw / vh;
+      // Start at natural viewBox width, cap to MAX_W
+      w = Math.min(vw, MAX_W);
+      h = w / ratio;
+      // If height exceeds MAX_H, scale down by height constraint
+      if (h > MAX_H) {
+        h = MAX_H;
+        w = h * ratio;
+      }
+      w = Math.round(w);
+      h = Math.round(h);
+    } else {
+      w = 800;
+      h = 'auto';
+    }
+
+    cloned.style.cssText = 'width:' + w + 'px; height:' + (h === 'auto' ? 'auto' : h + 'px') + '; max-width:100%;';
 
     activeLightbox = svg;
     currentScale = 1;
