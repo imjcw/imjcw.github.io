@@ -10,7 +10,7 @@
     </div>
   <% } %>
 
-  <h1 class="post-title"><%= page.title %></h1>
+  <h1 class="post-title"><%= page.title %><% if (page.repost) { %><span class="repost-badge">转载</span><% } %></h1>
 
   <div class="post-meta">
     <% if (meta.show_author !== false) { %>
@@ -19,6 +19,35 @@
     <% if (meta.show_date !== false) { %>
       <span>·</span>
       <span><%- date(page.date, config.date_format) %></span>
+    <% } %>
+    <%
+      if (page.repost && page.original_url) {
+    %>
+      <a href="/<%= page.permalink.replace(/^https?:\/\/[^\/]+\/|\/$/g, '') %>/article.md" target="_blank" class="post-raw-link" title="Markdown 源码">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <path d="M5.5 15V9l3 3 3-3v6"/>
+          <path d="M14 15V9h1.5a3 3 0 0 1 0 6H14z"/>
+        </svg>
+      </a>
+      <a href="<%= page.original_url %>" target="_blank" class="post-raw-link" title="原文链接">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <text x="12" y="14.8" text-anchor="middle" font-family="system-ui, sans-serif"
+                font-size="8" font-weight="600" fill="currentColor" stroke="none">原文</text>
+        </svg>
+      </a>
+    <% } else if (page.source && page.permalink) { %>
+      <a href="/<%= page.permalink.replace(/^https?:\/\/[^\/]+\/|\/$/g, '') %>/article.md" target="_blank" class="post-raw-link" title="Markdown 源码">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <path d="M5.5 15V9l3 3 3-3v6"/>
+          <path d="M14 15V9h1.5a3 3 0 0 1 0 6H14z"/>
+        </svg>
+      </a>
     <% } %>
   </div>
 
@@ -33,22 +62,6 @@
   <article class="post-content">
     <%- page.content %>
   </article>
-
-  <%
-    var rawMd = page._content || '';
-    var fmMatch = rawMd.match(/^---[\s\S]*?---\s*\n/);
-    if (fmMatch) rawMd = rawMd.substring(fmMatch[0].length);
-  %>
-  <div class="post-raw-wrap">
-    <button class="post-raw-toggle" id="rawToggleBtn">查看 Markdown 源码</button>
-    <div class="post-raw-content" id="rawContent">
-      <div class="post-raw-header">
-        <span class="post-raw-title">Markdown 源码</span>
-        <button class="post-raw-copy" id="rawCopyBtn" title="复制源码">复制</button>
-      </div>
-      <pre class="post-raw-code"><%= rawMd %></pre>
-    </div>
-  </div>
 
   <div class="post-disclaimer">
     <div class="post-disclaimer-text">本文章观点仅代表个人立场，部分观点可能已过时，仅供参考。</div>
@@ -306,40 +319,6 @@
       }
 
       return { open: open };
-    })();
-  </script>
-
-  <script>
-    (function () {
-      var btn = document.getElementById('rawToggleBtn');
-      var content = document.getElementById('rawContent');
-      var copyBtn = document.getElementById('rawCopyBtn');
-      var code = document.querySelector('.post-raw-code');
-      if (!btn || !content) return;
-
-      btn.addEventListener('click', function () {
-        content.classList.toggle('visible');
-        btn.classList.toggle('active');
-        btn.textContent = content.classList.contains('visible') ? '收起 Markdown 源码' : '查看 Markdown 源码';
-      });
-
-      if (copyBtn && code) {
-        copyBtn.addEventListener('click', function () {
-          navigator.clipboard.writeText(code.textContent).then(function () {
-            var old = content.querySelector('.post-raw-copy-bubble');
-            if (old) old.remove();
-            var bubble = document.createElement('span');
-            bubble.className = 'post-raw-copy-bubble';
-            bubble.textContent = '已复制';
-            copyBtn.parentNode.insertBefore(bubble, copyBtn);
-            requestAnimationFrame(function () { bubble.classList.add('show'); });
-            setTimeout(function () {
-              bubble.classList.remove('show');
-              setTimeout(function () { bubble.remove(); }, 200);
-            }, 1200);
-          }).catch(function () {});
-        });
-      }
     })();
   </script>
 </main>

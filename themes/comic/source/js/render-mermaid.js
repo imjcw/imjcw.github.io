@@ -23,7 +23,9 @@
           '</div>' +
           '<div class="mbox-actions">' +
             '<span class="mbox-btn mbox-btn-reset" data-action="reset" title="重置">&#8635;</span>' +
-            '<button class="mbox-btn" data-action="download" title="下载 PNG">&#8595;</button>' +
+            '<button class="mbox-btn" data-action="download" title="下载 PNG">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>' +
+              '</button>' +
             '<button class="mbox-btn" data-action="close" title="关闭">&times;</button>' +
           '</div>' +
         '</div>' +
@@ -285,25 +287,39 @@
     img.src = url;
   }
 
-  // Attach click/keyboard handlers to all pre-rendered mermaid SVG containers
+  // Attach hover-reveal toolbars to all pre-rendered mermaid SVG containers
   document.querySelectorAll('.mermaid-svg').forEach(function (container) {
     if (container.dataset.bound) return;
     container.dataset.bound = '1';
     var svg = container.querySelector('svg');
     if (!svg) return;
 
-    var handler = function () {
+    var toolbar = document.createElement('div');
+    toolbar.className = 'mermaid-toolbar';
+
+    var dlBtn = document.createElement('button');
+    dlBtn.className = 'mermaid-download';
+    dlBtn.type = 'button';
+    dlBtn.title = '下载 PNG';
+    dlBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>';
+    dlBtn.addEventListener('click', function () {
+      activeLightbox = svg;
+      downloadPng();
+    });
+
+    var zoomBtn = document.createElement('button');
+    zoomBtn.className = 'mermaid-zoom';
+    zoomBtn.type = 'button';
+    zoomBtn.title = '预览';
+    zoomBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><defs><path id="c" d="M9 5 Q5 5 5 9"/></defs><use href="#c"/><use href="#c" transform="rotate(90 12 12)"/><use href="#c" transform="rotate(180 12 12)"/><use href="#c" transform="rotate(270 12 12)"/></svg>';
+    zoomBtn.addEventListener('click', function () {
       var lb = document.getElementById('mermaid-lightbox');
       if (lb && lb.style.display === 'flex') return;
       showDialog(svg);
-    };
-
-    container.addEventListener('click', handler);
-    container.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handler();
-      }
     });
+
+    toolbar.appendChild(dlBtn);
+    toolbar.appendChild(zoomBtn);
+    container.appendChild(toolbar);
   });
 })();

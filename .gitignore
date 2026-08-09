@@ -6,3 +6,5 @@ node_modules/
 public/
 ftp_public/
 .deploy*/
+.zcode/
+page.html

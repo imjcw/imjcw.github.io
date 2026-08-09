@@ -15,7 +15,7 @@ import puppeteer from 'puppeteer';
 import fs from 'node:fs';
 
 const MERMAID_SCRIPT = fs.readFileSync(
-  new URL('./mermaid.min.js', import.meta.url),
+  new URL('./scripts/mermaid.min.js', import.meta.url),
   'utf-8'
 );
 

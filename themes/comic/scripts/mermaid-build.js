@@ -26,7 +26,7 @@ function escapeHtmlReplacer(text) {
     .replace(/&#x2F;/g, '/');
 }
 
-var RENDERER = path.resolve(__dirname, 'mermaid-render.mjs');
+var RENDERER = path.resolve(__dirname, '..', 'mermaid-render.mjs');
 
 hexo.extend.filter.register('after_post_render', function (data) {
   if (!data.content || data.content.indexOf('<pre') === -1) return data;
