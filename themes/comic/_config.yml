@@ -28,6 +28,8 @@ index:
 footer:
   copyright: '2026'
   description:
+  theme_link: 'https://github.com/imjcw/comic-theme-hexo'
+  theme_link_text: 'Theme'
 
 # Post meta display
 post_meta:

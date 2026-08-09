@@ -2,5 +2,6 @@
   <div class="footer-inner">
     <p class="footer-title"><%= config.title %></p>
     <p class="footer-desc">© <%= theme.footer.copyright %><% if (theme.footer.description || config.subtitle) { %> · <%= theme.footer.description || config.subtitle %><% } %></p>
+    <% if (theme.footer.theme_link) { %><p class="footer-theme"><a href="<%= theme.footer.theme_link %>" target="_blank" rel="noopener"> <%= theme.footer.theme_link_text || 'Theme' %></a></p><% } %>
   </div>
 </footer>
