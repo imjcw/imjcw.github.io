@@ -53,7 +53,7 @@ h1, h2, h3, h4 {
 
 a {
   color: inherit;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 img {
@@ -699,6 +699,14 @@ img {
 .post-content h3 { font-size: 18px; margin-top: 24px; }
 
 .post-content p { margin: 0; }
+
+.post-content a {
+  text-decoration: underline;
+}
+
+.post-content .headerlink {
+  text-decoration: none;
+}
 
 .post-content p > img {
   display: block;
