@@ -2207,7 +2207,6 @@ img {
   align-items: center;
   justify-content: center;
   overflow: auto;
-  cursor: pointer;
 }
 .tool-preview-box .mermaid-svg svg {
   max-width: 100%;
