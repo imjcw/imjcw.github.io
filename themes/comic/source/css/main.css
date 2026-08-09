@@ -2081,16 +2081,18 @@ img {
 
 /* ========== Mermaid SVG (inline) ========== */
 .mermaid-svg {
+  margin: 24px 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin: 24px 0;
-  width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .mermaid-svg svg {
   display: block;
   width: auto !important;
-  max-width: 100%;
-  height: auto;
+  max-width: 100% !important;
+  height: auto !important;
+  overflow: visible;
 }
