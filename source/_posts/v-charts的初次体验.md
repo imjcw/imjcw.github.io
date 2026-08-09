@@ -26,7 +26,7 @@ categories:
 
 ## 折线图使用直线
 
-![折线图使用直线](https://img-blog.csdnimg.cn/img_convert/7137c76d172f2759a67cb109cff3b16f.png)
+![折线图使用直线](/media/ext/1786239257470_9sxdgy.webp)
 
 ```javascript
 <template>

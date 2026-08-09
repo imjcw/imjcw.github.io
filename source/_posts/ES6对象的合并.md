@@ -40,4 +40,4 @@ const object_merge = Object.assign(object1, object2)
 console.log(object_merge);
 ```
 
-![ES6 对象合并](https://img-blog.csdnimg.cn/img_convert/a81e52ad7e34528d48b9fc6e6cbcbe62.png)
+![ES6 对象合并](/media/ext/1786239254387_ckyd8f.webp)

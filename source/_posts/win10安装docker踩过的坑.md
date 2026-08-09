@@ -32,4 +32,4 @@ switch to linux containers
 4, 选择“打开或关闭 Windows 功能”。
 5, 选择“Hyper-V”，然后单击“确定”。
 
-![图](https://img-blog.csdnimg.cn/img_convert/6e27a9288713d2769e0ba998992abd80.png)
+![图](/media/ext/1786239258111_q095vz.webp)

@@ -36,19 +36,19 @@ categories:
 
 首先，创建一个编译系统。`Tools` -> `Build System` -> `New Build System...`
 
-![添加编译系统](/media/Hyperf/image-20201028150434107.png)
+![添加编译系统](/media/Hyperf/image-20201028150434107.webp)
 
 接着，编写执行时需要执行的命令。(我本地使用的是 `Docker`，只需要重启容器就好)
 
-![编写编译时要执行的命令](/media/Hyperf/image-20201028150635375.png)
+![编写编译时要执行的命令](/media/Hyperf/image-20201028150635375.webp)
 
 接着，保存为 `Hyperf.sublime-build`。并选择 `Hyperf` 作为编译系统。
 
-![选择自定义编译系统](/media/Hyperf/image-20201028150924880.png)
+![选择自定义编译系统](/media/Hyperf/image-20201028150924880.webp)
 
 最后，编写完代码之后，`Ctrl+B` 一键编译。
 
-![编译结果](/media/Hyperf/image-20201028151215465.png)
+![编译结果](/media/Hyperf/image-20201028151215465.webp)
 
 ### 使用watch改造
 

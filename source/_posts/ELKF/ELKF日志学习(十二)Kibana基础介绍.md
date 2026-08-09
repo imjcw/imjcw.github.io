@@ -54,19 +54,19 @@ elasticsearch.hosts: [ "http://elasticsearch:9200" ]
 
 1、`设置` -> `索引模式` -> `创建索引模式`。
 
-![创建索引模式](/media/Docker/image-20201105132048723.png)
+![创建索引模式](/media/Docker/image-20201105132048723.webp)
 
 2、检索索引
 
-![检索索引](/media/Docker/image-20201105132155416.png)
+![检索索引](/media/Docker/image-20201105132155416.webp)
 
 3、配置、创建
 
-![配置创建](/media/Docker/image-20201105132222094.png)
+![配置创建](/media/Docker/image-20201105132222094.webp)
 
 4、创建成功，尽情使用吧
 
-![创建成功](/media/Docker/image-20201105132249912.png)
+![创建成功](/media/Docker/image-20201105132249912.webp)
 
 ## 最后
 

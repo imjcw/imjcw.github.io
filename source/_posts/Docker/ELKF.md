@@ -25,7 +25,7 @@ categories:
 
 `kibana` 是数据分析和可视化平台，通常依赖 `elasticsearch` 。
 
-![图片来源于网络](/media/Docker/1602482736040-5d79cb63-6945-4842-9c47-dc14f0400df2.png)
+![图片来源于网络](/media/Docker/1602482736040-5d79cb63-6945-4842-9c47-dc14f0400df2.webp)
 
 图片来源于网络
 
@@ -330,7 +330,7 @@ elasticsearch.hosts: [ "http://elasticsearch:9200" ]
 
 [Grok Debugger](https://grokdebug.herokuapp.com) 可以帮助我们验证调试解日志的正则。(可能需要自备梯子)
 
-![image-20201105131708919](/media/Docker/image-20201105131708919.png)
+![image-20201105131708919](/media/Docker/image-20201105131708919.webp)
 
 `Kibana` 也提供了相应的工具，只不过没那么好用罢了。
 
@@ -406,16 +406,16 @@ output.logstash:
 
 1、`设置` -> `索引模式` -> `创建索引模式`。
 
-![创建索引模式](/media/Docker/image-20201105132048723.png)
+![创建索引模式](/media/Docker/image-20201105132048723.webp)
 
 2、检索索引
 
-![检索索引](/media/Docker/image-20201105132155416.png)
+![检索索引](/media/Docker/image-20201105132155416.webp)
 
 3、配置、创建
 
-![配置创建](/media/Docker/image-20201105132222094.png)
+![配置创建](/media/Docker/image-20201105132222094.webp)
 
 4、创建成功，尽情使用吧
 
-![创建成功](/media/Docker/image-20201105132249912.png)
+![创建成功](/media/Docker/image-20201105132249912.webp)

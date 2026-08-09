@@ -41,11 +41,11 @@ filebeat.inputs:
 
 我们查看日志时会是这样子的：
 
-![keys_under_root:false](/media/ELKF/image-20201127175629214.png)
+![keys_under_root:false](/media/ELKF/image-20201127175629214.webp)
 
 为了能够让 `json` 的键提升到第一级，我们设置 `keys_under_root: true`，就会变成这样：
 
-![keys_under_root:true](/media/ELKF/image-20201127175422430.png)
+![keys_under_root:true](/media/ELKF/image-20201127175422430.webp)
 
 ### overwrite_keys
 

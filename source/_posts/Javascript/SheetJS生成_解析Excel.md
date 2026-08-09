@@ -24,7 +24,7 @@ categories:
 
 ### 兼容性
 
-![图片来源于网络](/media/Javascript/sheetjs.png)
+![图片来源于网络](/media/Javascript/sheetjs.webp)
 
 ### 使用方式
 

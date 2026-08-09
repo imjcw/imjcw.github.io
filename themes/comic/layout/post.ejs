@@ -121,10 +121,20 @@
         }
       });
 
-      // Make images clickable + add caption from alt
+      // Make images clickable + add caption from alt + loading animation
       article.querySelectorAll('img').forEach(function (img) {
         img.classList.add('post-img-clickable');
         img.style.cursor = 'pointer';
+        if (img.complete) {
+          img.classList.add('img-loaded');
+        } else {
+          img.addEventListener('load', function () {
+            img.classList.add('img-loaded');
+          });
+          img.addEventListener('error', function () {
+            img.classList.add('img-loaded');
+          });
+        }
         if (img.alt) {
           var cap = document.createElement('div');
           cap.className = 'post-img-caption';

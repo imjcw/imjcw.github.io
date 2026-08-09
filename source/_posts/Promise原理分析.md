@@ -43,7 +43,7 @@ new Promise((resolve) => {
 
 执行结果如下：
 
-![img](https://img-blog.csdnimg.cn/img_convert/97ed5e3f4d41dcf1ff78ecd6b597bf20.png)
+![img](/media/ext/1786239255146_fp7d5h.webp)
 
 ## 代码分析
 
@@ -417,13 +417,13 @@ function PromiseDemo(foo) {
 
 执行一开始的 `demo`，结果如下：
 
-![img](https://img-blog.csdnimg.cn/img_convert/bd6c3aa4d259d8dadd66af3b3416a396.png)
+![img](/media/ext/1786239256010_z3ho1i.webp)
 
 ### 流程图
 
 说也说了，写也写了，整个流程是什么样子的呢？
 
-![img](https://img-blog.csdnimg.cn/img_convert/23dc2c5a7a1af38925e3ac19d3c74db2.png)
+![img](/media/ext/1786239256890_apa054.webp)
 
 ## 参考资料
 

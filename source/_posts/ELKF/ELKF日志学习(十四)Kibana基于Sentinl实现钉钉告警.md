@@ -14,7 +14,7 @@ categories:
 
 最好先学习一下 `sentinl` 的使用，以及 `Elasticsearch` 的语法。
 
-![image-20201217132932245](/media/ELKF/image-20201217132932245.png)
+![image-20201217132932245](/media/ELKF/image-20201217132932245.webp)
 
 ## 代码仓库
 

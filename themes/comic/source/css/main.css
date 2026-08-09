@@ -708,6 +708,30 @@ img {
   margin-right: auto;
 }
 
+/* Image loading shimmer animation */
+@keyframes img-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.post-content img:not(.img-loaded) {
+  min-height: 100px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: img-shimmer 1.5s ease-in-out infinite;
+  opacity: 1;
+}
+
+.post-content img.img-loaded {
+  background: none;
+  animation: img-fade-in 0.3s ease-out forwards;
+}
+
+@keyframes img-fade-in {
+  from { opacity: 0.6; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 .post-content ul,
 .post-content ol {
   padding-left: 24px;

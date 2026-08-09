@@ -54,6 +54,24 @@
     })();
   </script>
 
+  <script>
+    (function () {
+      var imgs = document.querySelectorAll('img:not(.img-loaded)');
+      imgs.forEach(function (img) {
+        if (img.complete) {
+          img.classList.add('img-loaded');
+        } else {
+          img.addEventListener('load', function () {
+            img.classList.add('img-loaded');
+          });
+          img.addEventListener('error', function () {
+            img.classList.add('img-loaded');
+          });
+        }
+      });
+    })();
+  </script>
+
   <%- partial('_partial/nav.ejs') %>
   <%- body %>
   <%- partial('_partial/footer.ejs') %>

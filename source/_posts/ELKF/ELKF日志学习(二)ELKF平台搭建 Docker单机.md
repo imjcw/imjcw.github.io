@@ -140,7 +140,7 @@ Creating kibana        ... done
 
 等两分钟后，打开 [http://127.0.0.1:5601](javascript:void(0);)。
 
-![Kibana面板](/media/ELKF/image-20201124164353961.png)
+![Kibana面板](/media/ELKF/image-20201124164353961.webp)
 
 尽情探索吧。
 

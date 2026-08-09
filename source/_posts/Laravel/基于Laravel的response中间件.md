@@ -21,7 +21,7 @@ categories:
 
 原理就不说明了，一张图帮助理解(我懒)。
 
-![图片来自网络](/media/Laravel/laravel-middleware.png)
+![图片来自网络](/media/Laravel/laravel-middleware.webp)
 
 1、创建文件 `app/Http/Middleware/FormaterResponse.php`
 

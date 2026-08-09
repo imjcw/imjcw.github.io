@@ -26,21 +26,21 @@ categories:
 
 这里有五种选择，我们可以根据自己的需求选择自己想要的。
 
-![Typora设置图像](/media/image-20201026134122184.png)
+![Typora设置图像](/media/image-20201026134122184.webp)
 
 我的配置，如下：
 
-![我的Typora设置图像配置](/media/image-20201026134301068.png)
+![我的Typora设置图像配置](/media/image-20201026134301068.webp)
 
 效果如下：
 
-![Typora粘贴图片后的效果](/media/image-20201026134347657.png)
+![Typora粘贴图片后的效果](/media/image-20201026134347657.webp)
 
 #### 简单的方式
 
 在文件的开头，写上 `typora-copy-images-to: /media`，这就是将图片复制到与当前文件所在文件夹同级的 `media` 目录中，`Demo` 如下：
 
-![image-20201026135308261](/media/image-20201026135308261.png)
+![image-20201026135308261](/media/image-20201026135308261.webp)
 
 
 
@@ -48,7 +48,7 @@ categories:
 
 目前 `Typora` 使用了 `PicGo` 来实现上传到第三方图床的功能，这里可以参考 [使用Markdown编辑器Typora+PicGo图床+jsDelivr CDN实现高效创作](https://zhuanlan.zhihu.com/p/102776592)。
 
-![Typora上传配置](/media/image-20201026134648724.png)
+![Typora上传配置](/media/image-20201026134648724.webp)
 
 ## 最后
 

@@ -43,7 +43,7 @@ categories:
 
 `输出` 可以是 `Elasticsearch`、`Kafka`、`Logstash`、`redis` 等。
 
-![img](/media/ELKF/1271254-20200615140610959-1559395773.png)
+![img](/media/ELKF/1271254-20200615140610959-1559395773.webp)
 
 ## 配置解析
 

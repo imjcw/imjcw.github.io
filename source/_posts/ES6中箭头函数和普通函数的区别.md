@@ -28,7 +28,7 @@ var user = {
 }
 ```
 
-![普通函数的 this.png](https://img-blog.csdnimg.cn/img_convert/4e9231222d334b1f09a3d0b5a6455f23.png)
+![普通函数的 this.png](/media/ext/1786239247491_u9fb1l.webp)
 
 再来一个箭头函数的例子：
 
@@ -41,7 +41,7 @@ var user = {
 }
 ```
 
-![=> 函数的 this](https://img-blog.csdnimg.cn/img_convert/bb30f5fad2555ba70a13420585574eaf.png)
+![=> 函数的 this](/media/ext/1786239248190_alcx1a.webp)
 
 ### 箭头函数不可以作为构造函数(即不能使用 new)
 
@@ -51,7 +51,7 @@ var user = {
 var user = function () {}
 ```
 
-![普通函数可以 new](https://img-blog.csdnimg.cn/img_convert/7b92fdddfb09e32ac47edf3026f38d4f.png)
+![普通函数可以 new](/media/ext/1786239249111_1sx47i.webp)
 
 箭头函数的例子：
 
@@ -59,7 +59,7 @@ var user = function () {}
 var user = () => {}
 ```
 
-![=> 函数不可以使用 new](https://img-blog.csdnimg.cn/img_convert/634f222b53568cda874218b94b829fb8.png)
+![=> 函数不可以使用 new](/media/ext/1786239249845_9mt3xx.webp)
 
 ### 箭头函数不能使用原型
 
@@ -69,7 +69,7 @@ var user = () => {}
 var user = function () {}
 ```
 
-![普通函数有 prototype](https://img-blog.csdnimg.cn/img_convert/1d7a003855fdac6c856575c56c2da1a8.png)
+![普通函数有 prototype](/media/ext/1786239250527_wbgsen.webp)
 
 
 箭头函数的例子：
@@ -78,7 +78,7 @@ var user = function () {}
 var user = () => {}
 ```
 
-![=> 没有 prototype](https://img-blog.csdnimg.cn/img_convert/6ef11871c05b37942ac7c5fb0df1b095.png)
+![=> 没有 prototype](/media/ext/1786239251324_jb8rvz.webp)
 
 ### 箭头函数没有 arguments 对象
 
@@ -90,7 +90,7 @@ var user = function () {
 }
 ```
 
-![普通函数有 arguments](https://img-blog.csdnimg.cn/img_convert/be172e9540d2e133a0e358f2693821e9.png)
+![普通函数有 arguments](/media/ext/1786239252146_5qz6lj.webp)
 
 ```javascript
 var user = () => {
@@ -98,7 +98,7 @@ var user = () => {
 }
 ```
 
-![=> 没有 arguments](https://img-blog.csdnimg.cn/img_convert/783954af98becedd8c8ebdca414f5063.png)
+![=> 没有 arguments](/media/ext/1786239252771_8s4kez.webp)
 
 可以使用 `rest` 参数取代
 
@@ -108,7 +108,7 @@ var user = (...args) => {
 }
 ```
 
-![使用 rest 参数取代](https://img-blog.csdnimg.cn/img_convert/522caeb9e5b4c24aad1db1a8e617fab4.png)
+![使用 rest 参数取代](/media/ext/1786239253371_u9gznv.webp)
 
 ## 最后
 

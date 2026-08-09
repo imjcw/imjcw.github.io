@@ -15,7 +15,7 @@ categories:
 
 先上一张图(图片来源网络)
 
-![img](https://img-blog.csdnimg.cn/img_convert/0c3263a821fa28a63220b252e9e57841.png)
+![img](/media/ext/1786239245024_ex6tgr.webp)
 
 ### 登录
 
