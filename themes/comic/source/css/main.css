@@ -2089,3 +2089,17 @@ img {
   height: auto;
   margin: 0 auto;
 }
+/* 隔离主题样式对 SVG 内 foreignObject 文字的影响：.post-content 的 line-height/字重会
+   泄漏进 mermaid 的节点标签，导致文字高度超出 mermaid 预计算的 foreignObject 尺寸而被裁切 */
+.mermaid-svg svg foreignObject,
+.mbox-preview svg foreignObject {
+  overflow: visible !important;
+}
+.mermaid-svg svg foreignObject *,
+.mbox-preview svg foreignObject * {
+  line-height: normal !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
