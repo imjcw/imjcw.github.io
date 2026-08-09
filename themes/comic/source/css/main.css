@@ -2078,3 +2078,19 @@ img {
 .mb-0 { margin-bottom: 0; }
 .text-center { text-align: center; }
 .flex-wrap { flex-wrap: wrap; }
+
+/* ========== Mermaid SVG (inline) ========== */
+.mermaid-svg {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 24px 0;
+  width: 100%;
+  overflow-x: auto;
+}
+.mermaid-svg svg {
+  display: block;
+  width: auto !important;
+  max-width: 100%;
+  height: auto;
+}
