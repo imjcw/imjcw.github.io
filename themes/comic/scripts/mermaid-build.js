@@ -66,7 +66,8 @@ hexo.extend.filter.register('after_post_render', async function (data) {
   if (!hasMermaid) return data;
 
   var result = data.content;
-  var re = /<pre\b[^>]*>([\s\S]*?)<\/pre>/gi;
+  // Match the entire <figure>...</figure> block that contains a mermaid <pre>
+  var re = /<figure\b[^>]*>[\s\S]*?<pre\b[^>]*>([\s\S]*?)<\/pre>[\s\S]*?<\/figure>/gi;
   var matches = [];
   var m;
   while ((m = re.exec(result)) !== null) {
