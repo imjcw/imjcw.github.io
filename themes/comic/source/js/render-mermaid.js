@@ -1,17 +1,14 @@
 /*
- * Client-side mermaid rendering with macOS-style dialog preview.
- * Uses mermaid v9.4.3 (UMD format).
+ * Mermaid SVG interaction handler (lightbox: zoom, pan, download).
+ * SVG diagrams are pre-rendered at build time — this script only adds interactivity.
  */
 (function () {
   var currentScale = 1;
   var activeLightbox = null;
-
-  // Pan state
   var panX = 0, panY = 0;
   var isPanning = false;
   var panDragging = false, panDx = 0, panDy = 0;
 
-  // ---- Dialog UI ----
   function createDialog () {
     if (document.getElementById('mermaid-lightbox')) return;
     var overlay = document.createElement('div');
@@ -51,7 +48,6 @@
 
     document.addEventListener('keydown', function (e) {
       if (overlay.style.display !== 'flex') return;
-      // Ignore keyboard zoom when panning — prevent accidental reset
       if (isPanning) return;
       if (e.key === 'Escape') hideDialog();
       if (e.key === '+' || e.key === '=') { zoomAt(1.2); showReset(resetBtn); }
@@ -73,14 +69,12 @@
 
     var body = overlay.querySelector('.mbox-body');
 
-    // Scroll-wheel zoom toward cursor
     body.addEventListener('wheel', function (e) {
       e.preventDefault();
       zoomAt(e.deltaY > 0 ? 0.92 : 1.08, e.clientX, e.clientY);
       showReset(resetBtn);
     }, { passive: false });
 
-    // Pan drag on mousedown
     body.addEventListener('mousedown', function (e) {
       if (isPanning && e.button === 0) {
         panDragging = true;
@@ -109,7 +103,6 @@
       }
     });
 
-    // Header drag (window move)
     var modal = overlay.querySelector('.mbox');
     var head = overlay.querySelector('.mbox-head');
     var dragging = false, dx = 0, dy = 0;
@@ -142,7 +135,6 @@
 
   function zoomAt (factor, mouseX, mouseY) {
     var newScale = Math.max(0.3, Math.min(5, currentScale * factor));
-    // Zoom toward cursor if mouse coords provided
     if (mouseX != null) {
       var preview = document.querySelector('.mbox-preview');
       var bodyEl = document.querySelector('.mbox-body');
@@ -152,10 +144,8 @@
         var ratio = newScale / currentScale;
         var newW = pr.width * ratio;
         var newH = pr.height * ratio;
-        // SVG point under cursor (in pre-transform space)
         var svgX = (mouseX - pr.left) / currentScale;
         var svgY = (mouseY - pr.top) / currentScale;
-        // Adjust pan so that SVG point stays under cursor after zoom
         panX = mouseX - br.left - (br.width - newW) / 2 - svgX * newScale;
         panY = mouseY - br.top - (br.height - newH) / 2 - svgY * newScale;
       }
@@ -225,7 +215,6 @@
     overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 
-    // Blur the triggering element so keyboard events don't re-fire its handler
     if (document.activeElement) document.activeElement.blur();
 
     var resetBtn = overlay.querySelector('[data-action="reset"]');
@@ -282,78 +271,24 @@
     img.src = url;
   }
 
-  // ---- Mermaid ----
-  function prepareMermaid () {
-    var els = document.querySelectorAll('pre');
-    var re = /(flowchart |sequenceDiagram|classDiagram|gantt|stateDiagram|erDiagram|gitGraph|pie)/i;
-    els.forEach(function (pre) {
-      var text = (pre.innerText || pre.textContent).trim();
-      if (!re.test(text)) return;
-      var fig = pre.closest('figure');
-      if (!fig) return;
-      var id = 'mermaid-' + Math.random().toString(36).substr(2, 8);
-      var div = document.createElement('div');
-      div.className = 'mermaid';
-      div.id = id;
-      div.textContent = text;
-      div.setAttribute('tabindex', '0');
-      div.setAttribute('role', 'button');
-      div.setAttribute('aria-label', '点击放大图表');
-      fig.parentNode.insertBefore(div, fig.nextSibling);
-      fig.style.display = 'none';
-    });
-  }
+  // Attach click/keyboard handlers to all pre-rendered mermaid SVG containers
+  document.querySelectorAll('.mermaid-svg').forEach(function (container) {
+    if (container.dataset.bound) return;
+    container.dataset.bound = '1';
+    var svg = container.querySelector('svg');
+    if (!svg) return;
 
-  function attachInteractions () {
-    var divs = document.querySelectorAll('.mermaid');
-    divs.forEach(function (div) {
-      if (div.dataset.bound) return;
-      div.dataset.bound = '1';
-      var handler = function () {
-        var svg = div.querySelector('svg');
-        if (svg) showDialog(svg);
-      };
-      div.addEventListener('click', handler);
-      div.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          if (document.getElementById('mermaid-lightbox').style.display === 'flex') {
-            e.preventDefault();
-            return;
-          }
-          e.preventDefault();
-          handler();
-        }
-      });
-    });
-  }
+    var handler = function () {
+      if (document.getElementById('mermaid-lightbox').style.display === 'flex') return;
+      showDialog(svg);
+    };
 
-  function waitForMermaid () {
-    return new Promise(function (resolve) {
-      if (typeof mermaid !== 'undefined') { resolve(); return; }
-      var attempts = 0;
-      var interval = setInterval(function () {
-        attempts++;
-        if (typeof mermaid !== 'undefined') { clearInterval(interval); resolve(); }
-        if (attempts > 400) { clearInterval(interval); resolve(); }
-      }, 50);
+    container.addEventListener('click', handler);
+    container.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handler();
+      }
     });
-  }
-
-  waitForMermaid().then(function () {
-    prepareMermaid();
-    try {
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'neutral',
-        securityLevel: 'loose',
-        flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
-        sequence: { useMaxWidth: true },
-        gantt: { useMaxWidth: true }
-      });
-      mermaid.init(undefined, '.mermaid');
-    } catch (e) {
-      console.error('Mermaid init error:', e);
-    }
-    setTimeout(attachInteractions, 100);
   });
 })();

@@ -122,6 +122,12 @@ neat_js:
     - '**/jquery.fancybox.pack.js'
     - '**/index.js'
 
+# Sitemap
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:

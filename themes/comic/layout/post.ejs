@@ -2,6 +2,7 @@
   var meta = theme.post_meta || {};
 %>
 <main class="post-page">
+  <button class="post-toc-toggle" id="tocToggleBtn" title="目录">☰</button>
   <% if (page.categories.length > 0) { %>
     <div class="post-category-tags">
       <% page.categories.each(function(cate) { %>
@@ -72,8 +73,7 @@
     </div>
   <% } %>
 
-  <% if (page.content && (page.content.indexOf('flowchart ') > -1 || page.content.indexOf('sequenceDiagram') > -1 || page.content.indexOf('classDiagram') > -1 || page.content.indexOf('gantt') > -1 || page.content.indexOf('stateDiagram') > -1 || page.content.indexOf('erDiagram') > -1 || page.content.indexOf('gitGraph') > -1 || page.content.indexOf('pie') > -1)) { %>
-    <script src="<%- url_for('/js/mermaid.min.js') %>"></script>
+  <% if (page.content && (page.content.indexOf('<div class="mermaid-svg"') > -1)) { %>
     <script src="<%- url_for('/js/render-mermaid.js') %>"></script>
   <% } %>
 
@@ -341,6 +341,370 @@
           }).catch(function () {});
         });
       }
+    })();
+  </script>
+<style>
+/* ========== TOC (Table of Contents) — side rail style ========== */
+.post-toc-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 998;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: #fffef0;
+  border: 2px solid #1a1a1a;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 0 #1a1a1a;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+  transition: all 0.15s;
+}
+.post-toc-toggle:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 #1a1a1a;
+  background: #facc15;
+}
+@media (max-width: 1200px) {
+  .post-toc-toggle { display: flex; }
+}
+
+.post-toc-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 999;
+}
+.post-toc-overlay.active { display: block; }
+
+/* Desktop: floating side panel */
+.post-toc {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  width: 200px;
+  max-height: calc(100vh - 60px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: rgba(255, 254, 240, 0.92);
+  backdrop-filter: blur(4px);
+  border-left: 2px solid #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft Ya60", sans-serif;
+  font-size: 12px;
+  color: #666;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+@media (max-width: 1200px) {
+  /* Mobile drawer handled below */
+}
+@media (min-width: 1201px) {
+  .post-toc { display: flex; }
+}
+
+.post-toc-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 4px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #1a1a1a;
+}
+.post-toc-header-title {
+  flex: 1;
+  line-height: 1;
+}
+
+.post-toc-list {
+  position: relative;
+  padding-left: 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+}
+/* Vertical rail line */
+.post-toc-list::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e0e0e0;
+  border-radius: 1px;
+}
+
+.post-toc-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 3px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  text-decoration: none;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+  cursor: pointer;
+}
+.post-toc-item:hover {
+  color: #1a1a1a;
+}
+.post-toc-item.active {
+  color: #1a1a1a;
+  font-weight: 900;
+}
+/* Active indicator: yellow bar on rail */
+.post-toc-item.active::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  background: #facc15;
+  border-radius: 1px;
+}
+.post-toc-item .toc-arrow {
+  flex-shrink: 0;
+  width: 16px;
+  font-size: 9px;
+  color: #aaa;
+  transition: transform 0.15s;
+  line-height: 1.7;
+  text-align: center;
+  user-select: none;
+}
+.post-toc-item .toc-arrow.empty { visibility: hidden; }
+.post-toc-item.expanded > .toc-arrow {
+  transform: rotate(90deg);
+}
+.post-toc-item .toc-text {
+  flex: 1;
+  min-width: 0;
+  padding-left: 4px;
+}
+
+/* Depth levels */
+.post-toc-item.depth-1 { padding-left: 14px; }
+.post-toc-item.depth-2 { padding-left: 28px; font-size: 11px; }
+.post-toc-item.depth-3 { padding-left: 42px; font-size: 11px; }
+
+.post-toc-children { display: block; }
+.post-toc-children.collapsed { display: none; }
+
+/* Smooth scroll for TOC anchors */
+.post-content h1, .post-content h2, .post-content h3, .post-content h4 {
+  scroll-margin-top: 20px;
+}
+
+/* Mobile: bottom drawer */
+@media (max-width: 1200px) {
+  .post-toc {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    transform: none;
+    width: 100%;
+    max-height: 50vh;
+    border-left: none;
+    border-top: 2px solid #1a1a1a;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  .post-toc.active {
+    transform: translateY(0);
+  }
+  .post-toc-header {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  .post-toc-item {
+    font-size: 13px;
+    padding: 6px 12px 6px 16px;
+  }
+  .post-toc-close-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 4px;
+    color: #666;
+  }
+}
+</style>
+
+  <div class="post-toc-overlay" id="tocOverlay"></div>
+  <aside class="post-toc" id="tocDrawer">
+    <div class="post-toc-header">
+      <span class="post-toc-header-title">大纲</span>
+      <button class="toc-close-btn" id="tocCloseBtn">✕</button>
+    </div>
+    <nav class="post-toc-list" id="tocList"></nav>
+  </aside>
+
+  <script>
+    (function () {
+      var article = document.querySelector('.post-content');
+      if (!article) return;
+
+      var headings = article.querySelectorAll('h1, h2, h3, h4');
+      if (headings.length === 0) return;
+
+      var tocList = document.getElementById('tocList');
+      var toggleBtn = document.getElementById('tocToggleBtn');
+      var drawer = document.getElementById('tocDrawer');
+      var overlay = document.getElementById('tocOverlay');
+      var closeBtn = document.getElementById('tocCloseBtn');
+
+      // Ensure headings have IDs
+      headings.forEach(function (h, i) {
+        if (!h.id) h.id = 'toc-heading-' + i;
+      });
+
+      // Build tree: group children under their parent
+      var flatItems = [];
+      headings.forEach(function (h) {
+        flatItems.push({
+          level: parseInt(h.tagName.charAt(1)),
+          id: h.id,
+          text: h.textContent.trim(),
+          el: h
+        });
+      });
+
+      // Build nested tree
+      var tree = [];
+      var stack = [];
+      flatItems.forEach(function (item) {
+        while (stack.length > 0 && stack[stack.length - 1].level >= item.level) {
+          stack.pop();
+        }
+        if (stack.length > 0) {
+          stack[stack.length - 1].children = stack[stack.length - 1].children || [];
+          stack[stack.length - 1].children.push(item);
+        } else {
+          tree.push(item);
+        }
+        stack.push(item);
+      });
+
+      function buildTOCNode(item, depth) {
+        var hasChildren = item.children && item.children.length > 0;
+        var container = document.createElement('div');
+        var a = document.createElement('a');
+        var childrenWrap = null;
+
+        a.className = 'post-toc-item depth-' + (depth + 1);
+        a.href = '#' + item.id;
+
+        var arrow = document.createElement('span');
+        arrow.className = 'toc-arrow' + (hasChildren ? '' : ' empty');
+        arrow.textContent = '▸';
+
+        var text = document.createElement('span');
+        text.className = 'toc-text';
+        text.textContent = item.text;
+
+        a.appendChild(arrow);
+        a.appendChild(text);
+        container.appendChild(a);
+
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          item.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (hasChildren && childrenWrap) {
+            childrenWrap.classList.contains('collapsed')
+              ? childrenWrap.classList.remove('collapsed')
+              : childrenWrap.classList.add('collapsed');
+            childrenWrap.classList.contains('collapsed')
+              ? a.classList.remove('expanded')
+              : a.classList.add('expanded');
+          }
+        });
+
+        if (hasChildren) {
+          childrenWrap = document.createElement('div');
+          childrenWrap.className = 'post-toc-children';
+          item.children.forEach(function (child) {
+            childrenWrap.appendChild(buildTOCNode(child, depth + 1));
+          });
+          container.appendChild(childrenWrap);
+        }
+
+        return container;
+      }
+
+      tree.forEach(function (node) {
+        tocList.appendChild(buildTOCNode(node, 0));
+      });
+
+      // Toggle (mobile)
+      function openToc() {
+        drawer.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeToc() {
+        drawer.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      if (toggleBtn) toggleBtn.addEventListener('click', function () {
+        drawer.classList.contains('active') ? closeToc() : openToc();
+      });
+      if (closeBtn) closeBtn.addEventListener('click', closeToc);
+      if (overlay) overlay.addEventListener('click', closeToc);
+
+      // Scroll spy
+      var tocItems = tocList.querySelectorAll('.post-toc-item');
+
+      function updateActive() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var activeIdx = -1;
+        for (var i = 0; i < headings.length; i++) {
+          if (headings[i].getBoundingClientRect().top < 60) {
+            activeIdx = i;
+          }
+        }
+        tocItems.forEach(function (item, i) {
+          if (i === activeIdx) item.classList.add('active');
+          else item.classList.remove('active');
+        });
+      }
+
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () { updateActive(); ticking = false; });
+          ticking = true;
+        }
+      });
+      updateActive();
     })();
   </script>
 </main>
