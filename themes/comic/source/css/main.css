@@ -738,6 +738,58 @@ img {
   gap: 8px;
 }
 
+/* ========== Post Content Table ========== */
+.post-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 3px solid #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 0 #1a1a1a;
+  margin: 12px 0;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.post-content thead th {
+  background: #1a1a1a;
+  color: #facc15;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 14px;
+  text-align: left;
+  border-right: 2px solid #333;
+}
+
+.post-content thead th:last-child {
+  border-right: none;
+}
+
+.post-content tbody td {
+  padding: 10px 14px;
+  background: #fffef0;
+  border-top: 2px solid #1a1a1a;
+  border-right: 2px solid #1a1a1a;
+  vertical-align: top;
+}
+
+.post-content tbody td:last-child {
+  border-right: none;
+}
+
+.post-content tbody tr:nth-child(even) td {
+  background: #fffbe6;
+}
+
+.post-content tbody tr:hover td {
+  background: #facc15;
+}
+
+/* ========== Post Content Table (End) ========== */
+
 .post-content blockquote {
   border-left: 4px solid #1a1a1a;
   padding: 8px 16px;
