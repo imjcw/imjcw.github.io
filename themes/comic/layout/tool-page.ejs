@@ -1,0 +1,322 @@
+<script src="<%- url_for('/js/mermaid.min.js') %>"></script>
+
+<section class="page-header">
+  <div class="page-header-inner">
+    <span class="badge">TOOL</span>
+    <h1 class="page-header-title"><%= page.title %></h1>
+    <p class="page-header-desc"><%= page.description || '' %></p>
+  </div>
+</section>
+
+<main class="main">
+  <div class="tool-split">
+    <div class="tool-split-left">
+      <div class="tool-editor">
+        <div class="tool-editor-head">
+          <span class="tool-editor-label">输入 Mermaid 代码</span>
+          <div class="tool-bar">
+            <button class="btn btn-cream btn-sm" id="tool-clear" type="button" title="清空">清空</button>
+            <button class="btn btn-yellow btn-sm" id="tool-example" type="button" title="加载示例">示例</button>
+            <button class="btn btn-blue btn-sm" id="tool-copy" type="button" title="复制代码">复制</button>
+          </div>
+        </div>
+        <textarea
+          id="tool-input"
+          class="tool-editor-area"
+          spellcheck="false"
+          placeholder="在此输入 Mermaid 语法..."
+          ><%- page.defaultCode || '' %></textarea>
+      </div>
+    </div>
+
+    <div class="tool-split-right">
+      <div class="tool-preview">
+        <div class="tool-editor-head">
+          <span class="tool-editor-label">渲染预览</span>
+          <div class="tool-bar">
+            <button class="btn btn-cream btn-sm" id="tool-dl-svg" type="button" title="下载 SVG">SVG</button>
+            <button class="btn btn-yellow btn-sm" id="tool-dl-png" type="button" title="下载 PNG">PNG</button>
+            <button class="btn btn-blue btn-sm" id="tool-zoom" type="button" title="放大预览">放大</button>
+          </div>
+        </div>
+        <div class="tool-preview-box" id="tool-output">
+          <div class="tool-error" id="tool-error" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var DEFAULT_CODE = <%- JSON.stringify(page.defaultCode || '') %>;
+  var input = document.getElementById('tool-input');
+  var output = document.getElementById('tool-output');
+  var errorEl = document.getElementById('tool-error');
+
+  var renderTimer = null;
+  var svgCounter = 0;
+  var lastSvg = null;
+
+  // Initialize mermaid
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    themeVariables: {
+      primaryColor: '#fffef0',
+      primaryTextColor: '#1a1a1a',
+      primaryBorderColor: '#1a1a1a',
+      lineColor: '#1a1a1a',
+      secondaryColor: '#facc15',
+      tertiaryColor: '#fffef0'
+    }
+  });
+
+  function showError(msg) {
+    if (!msg) {
+      errorEl.style.display = 'none';
+      return;
+    }
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
+    // Remove any SVG in output
+    var svgs = output.querySelectorAll('svg');
+    svgs.forEach(function (s) { s.parentElement && s.parentElement.remove(); });
+  }
+
+  function doRender() {
+    var code = input.value.trim();
+    if (!code) {
+      showError(null);
+      output.innerHTML = '<div class="tool-placeholder">输入 Mermaid 代码后自动渲染 &rarr;</div>';
+      lastSvg = null;
+      return;
+    }
+
+    var id = 'mermaid-' + (++svgCounter);
+    mermaid.render(id, code).then(function (result) {
+      showError(null);
+      var container = document.createElement('div');
+      container.className = 'mermaid-svg';
+      container.setAttribute('tabindex', '0');
+      container.setAttribute('role', 'button');
+      container.setAttribute('aria-label', '点击放大图表');
+      container.innerHTML = result.svg;
+      // Replace old svg with new
+      var old = output.querySelector('.mermaid-svg');
+      if (old) old.remove();
+      output.appendChild(container);
+      lastSvg = container.querySelector('svg');
+      // Attach zoom behavior (reuse mermaid-lightbox from render-mermaid.js pattern)
+      container.addEventListener('click', function () { openLightbox(lastSvg); });
+    }).catch(function (err) {
+      var old = output.querySelector('.mermaid-svg');
+      if (old) old.remove();
+      lastSvg = null;
+      showError('渲染错误: ' + (err.message || err));
+    });
+  }
+
+  function debouncedRender() {
+    if (renderTimer) clearTimeout(renderTimer);
+    renderTimer = setTimeout(doRender, 400);
+  }
+
+  if (input) {
+    input.addEventListener('input', debouncedRender);
+  }
+
+  // Clear
+  document.getElementById('tool-clear').addEventListener('click', function () {
+    input.value = '';
+    doRender();
+    input.focus();
+  });
+
+  // Load example
+  document.getElementById('tool-example').addEventListener('click', function () {
+    input.value = DEFAULT_CODE;
+    doRender();
+    input.focus();
+  });
+
+  // Copy
+  document.getElementById('tool-copy').addEventListener('click', function () {
+    var code = input.value;
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(function () {
+      var btn = document.getElementById('tool-copy');
+      var orig = btn.textContent;
+      btn.textContent = '已复制';
+      setTimeout(function () { btn.textContent = orig; }, 1500);
+    });
+  });
+
+  // Download SVG
+  document.getElementById('tool-dl-svg').addEventListener('click', function () {
+    if (!lastSvg) return;
+    var data = new XMLSerializer().serializeToString(lastSvg);
+    var blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'diagram.svg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // Download PNG (canvas-based)
+  document.getElementById('tool-dl-png').addEventListener('click', function () {
+    if (!lastSvg) return;
+    var clone = lastSvg.cloneNode(true);
+    clone.removeAttribute('style');
+    clone.removeAttribute('width');
+    clone.removeAttribute('height');
+    var bbox = lastSvg.getBBox ? lastSvg.getBBox() : null;
+    if (bbox) {
+      clone.setAttribute('width', String(bbox.width));
+      clone.setAttribute('height', String(bbox.height));
+    }
+    var data = new XMLSerializer().serializeToString(clone);
+    var blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+    img.onload = function () {
+      var s = 2;
+      var canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth * s;
+      canvas.height = img.naturalHeight * s;
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fffef0';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(function (b) {
+        if (!b) return;
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(b);
+        a.download = 'diagram.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      }, 'image/png');
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+
+  // Zoom / lightbox (same pattern as render-mermaid.js)
+  function openLightbox(svg) {
+    if (svg && svg.parentElement && svg.parentElement.id === 'mermaid-lightbox-body') {
+      // Already in lightbox
+      return;
+    }
+    var overlay = document.getElementById('mermaid-lightbox');
+    if (overlay && overlay.style.display === 'flex') {
+      // Close existing
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+      return;
+    }
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'mermaid-lightbox';
+      overlay.className = 'tool-lightbox';
+      overlay.innerHTML =
+        '<div class="tool-lightbox-inner">' +
+          '<div class="tool-lightbox-head">' +
+            '<span class="tool-lightbox-close" data-action="close">&times;</span>' +
+            '<span class="tool-lightbox-zoom" data-action="zoom-out" title="缩小">&minus;</span>' +
+            '<span class="tool-lightbox-scale">100%</span>' +
+            '<span class="tool-lightbox-zoom" data-action="zoom-in" title="放大">+</span>' +
+            '<button class="btn btn-cream btn-sm" data-action="download" title="下载 SVG">下载</button>' +
+          '</div>' +
+          '<div class="tool-lightbox-body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      var scale = 1;
+      var body = overlay.querySelector('.tool-lightbox-body');
+      var scaleEl = overlay.querySelector('.tool-lightbox-scale');
+
+      overlay.querySelector('[data-action="close"]').addEventListener('click', function () {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+      overlay.querySelector('[data-action="zoom-in"]').addEventListener('click', function () {
+        scale = Math.min(5, scale * 1.3);
+        applyScale();
+      });
+      overlay.querySelector('[data-action="zoom-out"]').addEventListener('click', function () {
+        scale = Math.max(0.3, scale / 1.3);
+        applyScale();
+      });
+      overlay.querySelector('[data-action="download"]').addEventListener('click', function () {
+        var innerSvg = body.querySelector('svg');
+        if (innerSvg) {
+          var d = new XMLSerializer().serializeToString(innerSvg);
+          var bl = new Blob([d], { type: 'image/svg+xml;charset=utf-8' });
+          var u = URL.createObjectURL(bl);
+          var a = document.createElement('a');
+          a.href = u; a.download = 'diagram.svg';
+          document.body.appendChild(a); a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(u);
+        }
+      });
+
+      function applyScale() {
+        var svgEl = body.querySelector('svg');
+        if (svgEl) svgEl.style.transform = 'scale(' + scale + ')';
+        if (scaleEl) scaleEl.textContent = Math.round(scale * 100) + '%';
+      }
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          overlay.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (overlay.style.display !== 'flex') return;
+        if (e.key === 'Escape') { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+      });
+    }
+
+    var body = overlay.querySelector('.tool-lightbox-body');
+    body.innerHTML = '';
+    var cloned = svg.cloneNode(true);
+    cloned.removeAttribute('style');
+    cloned.removeAttribute('width');
+    cloned.removeAttribute('height');
+    cloned.style.transform = '';
+    var vb = cloned.getAttribute('viewBox');
+    var w = 900;
+    if (vb) {
+      var parts = vb.split(/[\s,]+/);
+      if (parts.length >= 3) {
+        var vw = parseFloat(parts[2]);
+        if (vw > 200 && vw < 2000) w = Math.min(Math.round(vw * 0.9), 1000);
+      }
+    }
+    cloned.style.width = w + 'px';
+    cloned.style.height = 'auto';
+    cloned.style.maxWidth = '100%';
+    body.appendChild(cloned);
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.getElementById('tool-zoom').addEventListener('click', function () {
+    if (!lastSvg) return;
+    openLightbox(lastSvg);
+  });
+
+  // Initial render if there's default code
+  if (DEFAULT_CODE) {
+    doRender();
+  }
+})();
+</script>
