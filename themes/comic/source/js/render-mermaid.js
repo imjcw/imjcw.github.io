@@ -293,7 +293,8 @@
     if (!svg) return;
 
     var handler = function () {
-      if (document.getElementById('mermaid-lightbox').style.display === 'flex') return;
+      var lb = document.getElementById('mermaid-lightbox');
+      if (lb && lb.style.display === 'flex') return;
       showDialog(svg);
     };
 
