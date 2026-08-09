@@ -1,15 +1,43 @@
-**Problem**: Lightbox shows SVG too small (~200px wide) because the cloned SVG's inline `style="max-width: 971px"` isn't being overridden by CSS.
+## Build-time Mermaid SVG Rendering
 
-**Root cause**: When cloning the SVG element, its inline `style` attribute carries over. Setting a new inline `style` in JS should work, but the CSS `.mermaid-lightbox-preview svg { width: auto; max-width: calc(100vw - 160px) }` conflicts with the SVG's intrinsic `width="100%"` attribute.
+### Problem
+Currently mermaid diagrams are rendered client-side using a 2.78MB `mermaid.min.js` loaded in every post page with mermaid blocks. The user wants them pre-rendered to SVG during `hexo generate`.
 
-**Fix** (2 parts):
+### Solution
 
-1. **JS** (`themes/comic/source/js/render-mermaid.js`): In `showLightbox()`, after cloning, explicitly set `width="100%"` and `style="max-width:none;width:100%;height:auto"` on the SVG element, and remove any conflicting `style` attribute.
+**1. Install `mermaid` npm package (Node.js API)**
+- `npm install --save-dev mermaid` — the package includes a `mermaid.render()` API that works in Node.js without Chromium
+- This is lightweight compared to `mermaid-cli`/`mmdc` which require Puppeteer/Chromium
 
-2. **CSS** (`themes/comic/source/css/main.css`): Simplify `.mermaid-lightbox-preview svg` to just `width: 100%; height: auto` — no `max-width` constraints that might conflict.
+**2. Create a Hexo filter script** (`themes/comic/scripts/mermaid-build.js`)
+- Register a `before_post_render` or `after_post_render` filter
+- Find all ```mermaid code blocks in the post markdown
+- Use `mermaid.render()` to convert each block to an SVG string
+- Replace the code block with an inline `<div class="mermaid-svg"><svg>...</svg></div>`
+- The SVG is embedded directly in the generated HTML — no client-side compilation needed
 
-3. **Rebuild + restart server** (already done above).
+**3. Remove client-side mermaid rendering**
+- Remove `mermaid.min.js` from `themes/comic/source/js/` (no longer needed)
+- Simplify `render-mermaid.js` to only handle lightbox interactions (click to zoom/pan/download)
+- Remove `mermaid.init()` call since SVG is already rendered
 
-4. **Verify** with browser: click mermaid diagram → lightbox opens with SVG at full width (~1000px+), zoom controls work, download button triggers PNG download.
+**4. Keep lightbox interaction**
+- The SVG lightbox dialog (zoom, pan, download as PNG) in `render-mermaid.js` continues to work on the pre-rendered SVG elements
+- Just query `.mermaid-svg svg` instead of `.mermaid svg`
 
-The border removal from the previous task is already confirmed working in the live page.
+**5. Update `post.ejs`**
+- Remove `mermaid.min.js` script tag
+- Keep only the simplified `render-mermaid.js` for interactions
+
+### Files to modify/create:
+- `package.json` / `package-lock.json` — add `mermaid` devDependency
+- `themes/comic/scripts/mermaid-build.js` — NEW: Hexo filter
+- `themes/comic/source/js/render-mermaid.js` — simplified (remove mermaid.init, query `.mermaid-svg svg`)
+- `themes/comic/layout/post.ejs` — remove mermaid.min.js script tag
+- Delete `themes/comic/source/js/mermaid.min.js`
+
+### Benefits:
+- No 2.78MB JS download for visitors
+- Diagrams render instantly on page load (already SVG in HTML)
+- Works even with JS disabled (SVG is inline)
+- Lightbox still works for zoom/pan/download
