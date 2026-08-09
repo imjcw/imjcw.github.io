@@ -24,14 +24,6 @@
       <% }); %>
     </div>
 
-    <div class="tag-cloud" style="margin-top:16px;">
-      <% site.tags.each(function(tag) { %>
-        <a href="<%- url_for(tag.path) %>" class="tag-cloud-item">
-          <span>#<%= tag.name %></span>
-        </a>
-      <% }); %>
-    </div>
-
     <div class="post-list" style="margin-top:48px;">
       <% page.posts.each(function(post) { %>
           <article class="post-list-item">
