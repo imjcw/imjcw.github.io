@@ -40,11 +40,11 @@
     if (fmMatch) rawMd = rawMd.substring(fmMatch[0].length);
   %>
   <div class="post-raw-wrap">
-    <button class="post-raw-toggle" id="rawToggleBtn">📄 查看 Markdown 源码</button>
+    <button class="post-raw-toggle" id="rawToggleBtn">查看 Markdown 源码</button>
     <div class="post-raw-content" id="rawContent">
       <div class="post-raw-header">
         <span class="post-raw-title">Markdown 源码</span>
-        <button class="post-raw-copy" id="rawCopyBtn" title="复制源码">📋 复制</button>
+        <button class="post-raw-copy" id="rawCopyBtn" title="复制源码">复制</button>
       </div>
       <pre class="post-raw-code"><%= rawMd %></pre>
     </div>
@@ -311,7 +311,7 @@
       btn.addEventListener('click', function () {
         content.classList.toggle('visible');
         btn.classList.toggle('active');
-        btn.textContent = content.classList.contains('visible') ? '📄 收起 Markdown 源码' : '📄 查看 Markdown 源码';
+        btn.textContent = content.classList.contains('visible') ? '收起 Markdown 源码' : '查看 Markdown 源码';
       });
 
       if (copyBtn && code) {
