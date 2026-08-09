@@ -322,4 +322,11 @@
     toolbar.appendChild(zoomBtn);
     container.appendChild(toolbar);
   });
+
+  // Expose lightbox API for reuse by other pages (e.g. tool-page)
+  window.mermaidLightbox = {
+    showDialog: showDialog,
+    hideDialog: hideDialog,
+    downloadPng: downloadPng
+  };
 })();
