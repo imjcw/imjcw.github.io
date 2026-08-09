@@ -235,6 +235,19 @@
 
   function downloadPng () {
     if (!activeLightbox) return;
+    var container = activeLightbox.closest ? activeLightbox.closest('.mermaid-svg') : null;
+    var png = container && container.getAttribute('data-png');
+    if (png) {
+      // Use the build-time rendered PNG (reliable; foreignObject text renders correctly)
+      var a = document.createElement('a');
+      a.href = png;
+      a.download = (activeLightbox.id || 'diagram') + '.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
+    // Fallback: render the inline SVG to a canvas (may fail on <foreignObject> text)
     var clone = activeLightbox.cloneNode(true);
     clone.removeAttribute('style');
     clone.removeAttribute('width');
@@ -258,6 +271,7 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(function (b) {
+        if (!b) return;
         var a = document.createElement('a');
         a.href = URL.createObjectURL(b);
         a.download = (activeLightbox.id || 'diagram') + '.png';

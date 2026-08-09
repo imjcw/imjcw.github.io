@@ -46,7 +46,7 @@ function makePageHtml(code) {
 async function renderSVG(diagramCode) {
   var browser = await getBrowser();
   var page = await browser.newPage();
-  await page.setViewport({ width: 1200, height: 800 });
+  await page.setViewport({ width: 1200, height: 800, deviceScaleFactor: 2 });
 
   var html = makePageHtml(diagramCode);
   await page.setContent(html, { waitUntil: 'load' });
@@ -55,8 +55,38 @@ async function renderSVG(diagramCode) {
     return window.__render();
   });
 
+  // Insert into the DOM so we can screenshot the *real* rendered SVG
+  // (including foreignObject HTML text, which canvas.toBlob cannot reproduce).
+  await page.evaluate(function (s) {
+    document.getElementById('diagram-container').innerHTML = s;
+  }, svg);
+
+  var pngBase64 = null;
+  try {
+    var handle = await page.$('#diagram');
+    if (handle) {
+      // Render at natural (viewBox) size so the capture is a clean 1:1 (then 2x retina).
+      await page.evaluate(function () {
+        var svgEl = document.getElementById('diagram');
+        var vb = svgEl.getAttribute('viewBox');
+        if (vb) {
+          var parts = vb.split(/[\s,]+/);
+          if (parts.length >= 4) {
+            svgEl.style.maxWidth = 'none';
+            svgEl.style.width = parts[2] + 'px';
+            svgEl.style.height = parts[3] + 'px';
+          }
+        }
+      });
+      var buf = await handle.screenshot({ type: 'png' });
+      pngBase64 = buf.toString('base64');
+    }
+  } catch (e) {
+    hexo.log.warn('mermaid-build: PNG capture failed: ' + e.message);
+  }
+
   await page.close();
-  return svg;
+  return { svg: svg, png: pngBase64 };
 }
 
 hexo.extend.filter.register('after_post_render', async function (data) {
@@ -98,11 +128,14 @@ hexo.extend.filter.register('after_post_render', async function (data) {
   for (var i = 0; i < matches.length; i++) {
     var item = matches[i];
     try {
-      var svgHtml = await renderSVG(item.code);
-      if (!svgHtml || !String(svgHtml).includes('<svg')) {
+      var out = await renderSVG(item.code);
+      if (!out || !out.svg || !String(out.svg).includes('<svg')) {
         throw new Error('No SVG in output');
       }
-      var wrapper = '<div class="mermaid-svg" tabindex="0" role="button" aria-label="点击放大图表">' + svgHtml + '</div>';
+      // Embed a build-time rendered PNG so the download button works reliably
+      // (mermaid uses <foreignObject> HTML text, which taints a canvas and breaks toBlob).
+      var pngAttr = out.png ? ' data-png="data:image/png;base64,' + out.png + '"' : '';
+      var wrapper = '<div class="mermaid-svg" tabindex="0" role="button" aria-label="点击放大图表"' + pngAttr + '>' + out.svg + '</div>';
       result = result.replace(item.full, wrapper);
     } catch (e) {
       hexo.log.warn('mermaid-build: diagram #' + (i + 1) + ' failed: ' + e.message);
