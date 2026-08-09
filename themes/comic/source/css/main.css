@@ -94,7 +94,6 @@ img {
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1;
-  text-decoration: none;
   transition: transform 0.15s;
 }
 .nav-title:hover {
@@ -116,13 +115,11 @@ img {
 
 .nav-links a {
   transition: transform 0.15s;
-  text-decoration: none;
 }
 .nav-links a:hover {
   transform: scale(1.1) rotate(-3deg);
 }
 .nav-links a.active {
-  text-decoration: underline;
   text-underline-offset: 4px;
 }
 
@@ -702,6 +699,7 @@ img {
 .post-content h3 { font-size: 18px; margin-top: 24px; }
 
 .post-content p { margin: 0; }
+
 .post-content p > img {
   display: block;
   margin-left: auto;
