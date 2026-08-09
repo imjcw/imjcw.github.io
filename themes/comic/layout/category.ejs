@@ -15,7 +15,16 @@
 
 <main class="main">
   <div class="main-inner">
-    <div class="post-list">
+    <div class="category-cloud">
+      <% site.categories.sort(function(a, b) { return b.posts.length - a.posts.length; }).each(function(cate) { %>
+        <a href="<%- url_for(cate.path) %>" class="category-cloud-item">
+          <span><%= cate.name %></span>
+          <span class="category-cloud-count"><%= cate.posts.length %></span>
+        </a>
+      <% }); %>
+    </div>
+
+    <div class="post-list" style="margin-top:48px;">
       <% page.posts.each(function(post) { %>
           <article class="post-list-item">
             <div class="post-list-left">
@@ -53,6 +62,6 @@
             </div>
           </article>
         <% }); %>
-      </div>
     </div>
+  </div>
 </main>

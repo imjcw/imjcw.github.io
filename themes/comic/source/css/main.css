@@ -1717,6 +1717,45 @@ img {
   font-size: 10px;
 }
 
+/* ========== Category Cloud (sub-page) ========== */
+.category-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.category-cloud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 3px solid #1a1a1a;
+  box-shadow: 3px 3px 0px 0px #1a1a1a;
+  background: #facc15;
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.15s;
+}
+.category-cloud-item:hover {
+  background: #3b82f6;
+  color: #fff;
+  box-shadow: 1px 1px 0px 0px #1a1a1a;
+  transform: translate(2px, 2px);
+}
+.category-cloud-count {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
 /* ========== Categories Page ========== */
 .cat-grid {
   display: grid;
