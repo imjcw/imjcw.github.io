@@ -50,7 +50,19 @@
                 <%- excerpt %><% if (excerpt.length >= 120) { %>...<% } %>
               </p>
               <div class="card-meta">
-                <span><%= post.content ? Math.ceil(post.content.length / 400) : 5 %> 分钟</span>
+                <%
+                  var _content = post.content || '';
+                  // 阅读时间：正文按 300 字/分钟；代码块(<pre>)与 mermaid 图表块(<div class="mermaid-svg">)按固定时间(每块 1 分钟)。
+                  // 这样可避免 SVG 内的 <style> 文本 / 代码字符被当成正文字数，导致阅读时间虚高。
+                  var _codeBlocks = (_content.match(/<pre[\s\S]*?<\/pre>/gi) || []).length;
+                  var _mermaidBlocks = (_content.match(/<div[^>]*class="[^"]*mermaid-svg[^"]*"[\s\S]*?<\/div>/gi) || []).length;
+                  var _clean = _content
+                    .replace(/<pre[\s\S]*?<\/pre>/gi, '')
+                    .replace(/<div[^>]*class="[^"]*mermaid-svg[^"]*"[\s\S]*?<\/div>/gi, '');
+                  var _chars = _clean ? strip_html(_clean).replace(/\s/g, '').length : 0;
+                  var _readingMinutes = _content ? Math.ceil(_chars / 300) + _codeBlocks + _mermaidBlocks : 5;
+                %>
+                <span><%= _readingMinutes %> 分钟</span>
                 <% if (post.tags.length > 0) { %>
                   <span class="post-list-tags">
                     <% post.tags.each(function(tag) { %>

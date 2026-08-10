@@ -11,7 +11,7 @@
     <% var tools = page.tools || []; tools.forEach(function (tool) { %>
       <a href="<%- url_for(tool.link || '#') %>" class="tool-card">
         <div class="tool-card-body">
-          <h3 class="tool-card-title"><%= tool.name %></h3>
+          <h3 class="tool-card-title"><% if (tool.icon) { %><span class="tool-card-ico"><%- tool.icon %></span><% } %><span><%= tool.name %></span></h3>
           <p class="tool-card-desc"><%= tool.desc %></p>
           <% if (tool.tags && tool.tags.length) { %>
             <div class="tool-card-tags">

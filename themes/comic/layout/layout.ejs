@@ -2,6 +2,38 @@
 <html lang="<%= config.language || 'zh-CN' %>">
 <%- partial('_partial/head.ejs') %>
 <body>
+  <div class="comic-loader" id="comic-loader" role="status" aria-live="polite">
+    <style>
+      .comic-loader{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#fffef0;transition:opacity .35s ease,visibility .35s}
+      .comic-loader.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+      .comic-loader-badge{position:relative;width:84px;height:84px;border:4px solid #1a1a1a;border-radius:18px;background:#facc15;box-shadow:6px 6px 0 #1a1a1a;display:flex;align-items:center;justify-content:center;animation:comic-wobble 1.4s ease-in-out infinite}
+      @keyframes comic-wobble{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+      .comic-loader-ring{position:absolute;inset:9px;border:3px solid #1a1a1a;border-radius:11px;background:#fffef0}
+      .comic-loader-dot{width:22px;height:22px;background:#ef4444;border:3px solid #1a1a1a;border-radius:50%;box-shadow:3px 3px 0 #1a1a1a;animation:comic-dot 1s ease-in-out infinite}
+      @keyframes comic-dot{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+      .comic-loader-text{font-size:15px;font-weight:900;color:#1a1a1a;letter-spacing:.12em;animation:comic-blink 1.2s steps(2,end) infinite}
+      @keyframes comic-blink{50%{opacity:.35}}
+      @media(prefers-reduced-motion:reduce){.comic-loader-badge,.comic-loader-dot,.comic-loader-text{animation:none}}
+    </style>
+    <div class="comic-loader-badge" aria-hidden="true">
+      <div class="comic-loader-ring"></div>
+      <div class="comic-loader-dot"></div>
+    </div>
+    <div class="comic-loader-text">加载中…</div>
+  </div>
+  <script>
+    (function () {
+      var loader = document.getElementById('comic-loader');
+      function hideLoader() {
+        if (!loader || loader.classList.contains('is-hidden')) return;
+        loader.classList.add('is-hidden');
+        setTimeout(function () { if (loader && loader.parentNode) loader.parentNode.removeChild(loader); }, 400);
+      }
+      if (document.readyState === 'complete') hideLoader();
+      else { window.addEventListener('load', hideLoader); setTimeout(hideLoader, 4000); }
+    })();
+  </script>
+
   <div class="deco-star ds1" style="top:8%;left:6%;">✦</div>
   <div class="deco-star ds2" style="top:18%;left:90%;">✧</div>
   <div class="deco-star ds3" style="top:40%;left:4%;">✦</div>

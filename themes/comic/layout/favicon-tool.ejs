@@ -1,0 +1,726 @@
+<section class="page-header">
+  <div class="page-header-inner page-header-wide">
+    <span class="badge">TOOL</span>
+    <h1 class="page-header-title"><%= page.title %></h1>
+    <p class="page-header-desc"><%= page.description || '' %></p>
+  </div>
+</section>
+
+<main class="main">
+  <div class="tool-split fav-split">
+    <div class="fav-top">
+      <div class="tool-editor">
+        <div class="tool-editor-head">
+          <span class="tool-editor-label">输入源</span>
+          <div class="tool-bar">
+            <button class="btn btn-cream btn-sm" id="tool-clear" type="button" title="清空">清空</button>
+            <button class="btn btn-yellow btn-sm" id="tool-example" type="button" title="加载示例">示例</button>
+          </div>
+        </div>
+        <div class="fav-input">
+          <div class="fav-tabs" id="fav-tabs">
+            <button class="fav-tab is-active" data-tab="code" type="button">SVG / data URI</button>
+            <button class="fav-tab" data-tab="file" type="button">上传图片文件</button>
+            <button class="fav-tab" data-tab="text" type="button">文字 / Emoji</button>
+          </div>
+          <div class="fav-panel is-active" data-panel="code">
+            <textarea
+              id="tool-input"
+              class="tool-editor-area"
+              spellcheck="false"
+              placeholder="在此粘贴 SVG 代码，或 data:image/... 的 data URI ..."><%- page.defaultCode || '' %></textarea>
+          </div>
+          <div class="fav-panel" data-panel="file">
+            <div class="fav-field fav-field-block">
+              <label for="tool-file">选择图片文件（PNG / JPG / SVG 等）</label>
+              <input type="file" id="tool-file" accept="image/*">
+            </div>
+          </div>
+          <div class="fav-panel" data-panel="text">
+            <div class="fav-field fav-field-block">
+              <label for="tool-text">输入一个文字或 Emoji</label>
+              <input type="text" id="tool-text" maxlength="2" placeholder="Z" autocomplete="off">
+            </div>
+          </div>
+          <div class="fav-hint">三种来源通过上方选项切换，每次仅使用当前选中的来源进行预览与导出。</div>
+        </div>
+      </div>
+      <div class="tool-editor fav-style">
+        <div class="tool-editor-head">
+          <span class="tool-editor-label">样式调整</span>
+        </div>
+        <div class="fav-style-body">
+
+          <div class="fav-style-row fav-style-row--wrap">
+            <label class="fav-toggle">
+              <input type="checkbox" id="st-bg-on" class="sr-only">
+              <span class="fav-toggle-track"><span class="fav-toggle-thumb"></span></span>
+              <span class="fav-toggle-label">背景色</span>
+            </label>
+            <div class="fav-swatches" data-target="st-bg">
+              <button type="button" class="fav-swatch is-active" data-color="#facc15" style="background:#facc15" title="#facc15"></button>
+              <button type="button" class="fav-swatch" data-color="#1a1a1a" style="background:#1a1a1a" title="#1a1a1a"></button>
+              <button type="button" class="fav-swatch" data-color="#ffffff" style="background:#ffffff" title="#ffffff"></button>
+              <button type="button" class="fav-swatch" data-color="#ef4444" style="background:#ef4444" title="#ef4444"></button>
+              <button type="button" class="fav-swatch" data-color="#3b82f6" style="background:#3b82f6" title="#3b82f6"></button>
+              <button type="button" class="fav-swatch" data-color="#22c55e" style="background:#22c55e" title="#22c55e"></button>
+              <button type="button" class="fav-swatch fav-swatch-custom" data-custom="1" title="自定义颜色">+</button>
+            </div>
+            <input type="color" id="st-bg" class="sr-only" value="#facc15">
+          </div>
+
+          <div class="fav-style-row fav-style-row--col">
+            <label class="fav-style-label">圆角 <span id="st-radius-val" class="fav-badge">20%</span></label>
+            <div class="fav-slider" id="slider-radius">
+              <div class="fav-slider-track"><div class="fav-slider-fill"></div><div class="fav-slider-thumb"></div></div>
+            </div>
+            <input type="range" id="st-radius" class="sr-only" min="0" max="50" value="20">
+          </div>
+
+          <div class="fav-style-row fav-style-row--wrap">
+            <label class="fav-toggle">
+              <input type="checkbox" id="st-border-on" class="sr-only">
+              <span class="fav-toggle-track"><span class="fav-toggle-thumb"></span></span>
+              <span class="fav-toggle-label">边框</span>
+            </label>
+            <div class="fav-swatches" data-target="st-border-color">
+              <button type="button" class="fav-swatch is-active" data-color="#1a1a1a" style="background:#1a1a1a" title="#1a1a1a"></button>
+              <button type="button" class="fav-swatch" data-color="#facc15" style="background:#facc15" title="#facc15"></button>
+              <button type="button" class="fav-swatch" data-color="#ef4444" style="background:#ef4444" title="#ef4444"></button>
+              <button type="button" class="fav-swatch" data-color="#3b82f6" style="background:#3b82f6" title="#3b82f6"></button>
+              <button type="button" class="fav-swatch fav-swatch-custom" data-custom="1" title="自定义颜色">+</button>
+            </div>
+            <input type="color" id="st-border-color" class="sr-only" value="#1a1a1a">
+          </div>
+
+          <div class="fav-style-row fav-style-row--wrap">
+            <label class="fav-style-label">边框宽度</label>
+            <div class="fav-stepper" data-target="st-border-w">
+              <button type="button" class="fav-step-btn" data-step="-1" title="减少">−</button>
+              <span class="fav-step-val" id="st-border-w-val">4</span>
+              <button type="button" class="fav-step-btn" data-step="1" title="增加">+</button>
+            </div>
+            <input type="number" id="st-border-w" class="sr-only" min="0" max="16" value="4">
+          </div>
+
+          <div class="fav-style-row fav-style-row--wrap" data-mode="text">
+            <label class="fav-style-label">内容颜色</label>
+            <div class="fav-swatches" data-target="st-text">
+              <button type="button" class="fav-swatch is-active" data-color="#1a1a1a" style="background:#1a1a1a" title="#1a1a1a"></button>
+              <button type="button" class="fav-swatch" data-color="#facc15" style="background:#facc15" title="#facc15"></button>
+              <button type="button" class="fav-swatch" data-color="#ffffff" style="background:#ffffff" title="#ffffff"></button>
+              <button type="button" class="fav-swatch" data-color="#ef4444" style="background:#ef4444" title="#ef4444"></button>
+              <button type="button" class="fav-swatch" data-color="#3b82f6" style="background:#3b82f6" title="#3b82f6"></button>
+              <button type="button" class="fav-swatch fav-swatch-custom" data-custom="1" title="自定义颜色">+</button>
+            </div>
+            <input type="color" id="st-text" class="sr-only" value="#1a1a1a">
+          </div>
+
+          <div class="fav-style-row fav-style-row--col" data-mode="text">
+            <label class="fav-style-label">字体</label>
+            <div class="fav-seg" data-target="st-font">
+              <button type="button" class="fav-seg-btn is-active" data-val="Arial, Helvetica, sans-serif">无衬线</button>
+              <button type="button" class="fav-seg-btn" data-val="Georgia, 'Times New Roman', serif">衬线</button>
+              <button type="button" class="fav-seg-btn" data-val="'Courier New', monospace">等宽</button>
+              <button type="button" class="fav-seg-btn" data-val="Impact, sans-serif">Impact</button>
+              <button type="button" class="fav-seg-btn" data-val="'Microsoft YaHei', 'PingFang SC', sans-serif">中文</button>
+              <button type="button" class="fav-seg-btn" data-val="'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji', sans-serif">Emoji</button>
+            </div>
+            <select id="st-font" class="sr-only">
+              <option value="Arial, Helvetica, sans-serif">无衬线 Arial</option>
+              <option value="Georgia, 'Times New Roman', serif">衬线 Serif</option>
+              <option value="'Courier New', monospace">等宽 Mono</option>
+              <option value="Impact, sans-serif">Impact 粗黑</option>
+              <option value="'Microsoft YaHei', 'PingFang SC', sans-serif">中文 黑体</option>
+              <option value="'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji', sans-serif">Emoji 彩色</option>
+            </select>
+          </div>
+
+          <div class="fav-style-row fav-style-row--col" data-mode="text">
+            <label class="fav-style-label">粗细</label>
+            <div class="fav-seg" data-target="st-weight">
+              <button type="button" class="fav-seg-btn" data-val="400">常规</button>
+              <button type="button" class="fav-seg-btn" data-val="700">加粗</button>
+              <button type="button" class="fav-seg-btn is-active" data-val="900">特粗</button>
+            </div>
+            <select id="st-weight" class="sr-only">
+              <option value="400">常规 400</option>
+              <option value="700">加粗 700</option>
+              <option value="900" selected>特粗 900</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-preview">
+        <div class="tool-editor-head">
+          <span class="tool-editor-label">预览 / 导出</span>
+        </div>
+        <div class="tool-preview-box">
+          <div class="tool-error" id="tool-error" style="display:none;"></div>
+          <div class="fav-sizes" id="fav-sizes"></div>
+          <div class="fav-placeholder" id="fav-placeholder">输入或上传图标源后自动预览 &rarr;</div>
+          <div class="fav-live-hint" id="fav-live-hint">✅ 已把当前图标设为浏览器标签页 favicon，去标签栏看看效果</div>
+        </div>
+        <div class="fav-outputs">
+          <div class="fav-bar">
+            <button class="btn btn-blue btn-sm" id="tool-ico" type="button" title="下载多尺寸 .ico">下载 .ico (16/32/48)</button>
+            <span class="fav-bar-sep"></span>
+            <span class="tool-editor-label">PNG</span>
+            <button class="btn btn-cream btn-sm" data-png="16" type="button">16</button>
+            <button class="btn btn-cream btn-sm" data-png="32" type="button">32</button>
+            <button class="btn btn-cream btn-sm" data-png="48" type="button">48</button>
+            <button class="btn btn-cream btn-sm" data-png="64" type="button">64</button>
+            <span class="fav-bar-sep"></span>
+            <button class="btn btn-yellow btn-sm" id="tool-svg" type="button" title="下载矢量 favicon.svg">下载 SVG</button>
+            <button class="btn btn-blue btn-sm" id="tool-html" type="button" title="复制 HTML 代码">复制 HTML</button>
+          </div>
+          <textarea id="fav-html" class="tool-editor-area fav-html-code" readonly spellcheck="false"></textarea>
+        </div>
+      </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var DEFAULT_CODE = <%- JSON.stringify(page.defaultCode || '') %>;
+  var input = document.getElementById('tool-input');
+  var fileInput = document.getElementById('tool-file');
+  var textInput = document.getElementById('tool-text');
+  var gallery = document.getElementById('fav-sizes');
+  var placeholder = document.getElementById('fav-placeholder');
+  var liveHint = document.getElementById('fav-live-hint');
+  var errorEl = document.getElementById('tool-error');
+  var htmlOut = document.getElementById('fav-html');
+
+  var SIZES = [16, 32, 48, 64];
+  var ICO_SIZES = [16, 32, 48];
+
+  var sourceType = 'none';   // 'svg' | 'uri' | 'file' | 'text' | 'none'
+  var sourceImg = null;      // HTMLImageElement for svg/uri/file
+  var textValue = '';
+  var currentFile = null;
+  var currentSourceDataUri = '';
+  var currentTab = 'code';   // 'code' | 'file' | 'text'
+  var style = {
+    bgEnabled: false,
+    bgColor: '#facc15',
+    radius: 20,           // 0..50 (% of size)
+    borderEnabled: false,
+    borderColor: '#1a1a1a',
+    borderWidth: 4,       // px in 64-unit space
+    textColor: '#1a1a1a',
+    fontFamily: "Arial, Helvetica, sans-serif",
+    fontWeight: "900"
+  };
+  var EMOJI_FONTS = ', "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji", sans-serif';
+
+  function showError(msg) {
+    if (!msg) { errorEl.style.display = 'none'; return; }
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
+  }
+
+  function loadImage(src) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { reject(new Error('图片加载失败，请检查输入是否合法')); };
+      img.src = src;
+    });
+  }
+
+  function readFileAsDataURL(file) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(r.result); };
+      r.onerror = function () { reject(r.error); };
+      r.readAsDataURL(file);
+    });
+  }
+
+  function normalizeSvg(svg) {
+    try {
+      var doc = new DOMParser().parseFromString(svg, 'image/svg+xml');
+      var el = doc.querySelector('svg');
+      if (el) {
+        if (!el.getAttribute('width') || !el.getAttribute('height')) {
+          var vb = el.getAttribute('viewBox');
+          if (vb) {
+            var p = vb.trim().split(/[\s,]+/);
+            el.setAttribute('width', p[2]);
+            el.setAttribute('height', p[3]);
+          } else {
+            el.setAttribute('width', '256');
+            el.setAttribute('height', '256');
+          }
+        }
+      }
+      return new XMLSerializer().serializeToString(doc.documentElement);
+    } catch (e) {
+      return svg;
+    }
+  }
+
+  function svgToDataUri(svg) {
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(normalizeSvg(svg));
+  }
+
+  function resolveSource() {
+    if (currentTab === 'text') {
+      return (textInput.value || '').trim() ? 'text' : 'none';
+    }
+    if (currentTab === 'file') {
+      return currentFile ? 'file' : 'none';
+    }
+    var code = (input.value || '').trim();
+    if (!code) return 'none';
+    if (/^data:image\//i.test(code)) return 'uri';
+    return 'svg';
+  }
+
+  async function loadSourceImage() {
+    var type = resolveSource();
+    sourceType = type;
+    textValue = (textInput.value || '').trim();
+    sourceImg = null;
+    currentSourceDataUri = '';
+    showError(null);
+    if (type === 'none') return;
+    try {
+      if (type === 'file') {
+        currentSourceDataUri = await readFileAsDataURL(currentFile);
+        sourceImg = await loadImage(currentSourceDataUri);
+      } else if (type === 'uri') {
+        currentSourceDataUri = input.value.trim();
+        sourceImg = await loadImage(currentSourceDataUri);
+      } else if (type === 'svg') {
+        currentSourceDataUri = svgToDataUri(input.value.trim());
+        sourceImg = await loadImage(currentSourceDataUri);
+      }
+    } catch (e) {
+      sourceType = 'none';
+      showError('无法解析输入：' + (e && e.message ? e.message : e));
+    }
+  }
+
+  function roundRectPath(ctx, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function renderToCanvas(size) {
+    var c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, size, size);
+    var r = size * style.radius / 100;
+    var bw = style.borderEnabled ? style.borderWidth * size / 64 : 0;
+
+    ctx.save();
+    if (r > 0) {
+      roundRectPath(ctx, 0, 0, size, size, r);
+      ctx.clip();
+    }
+    if (style.bgEnabled) {
+      ctx.fillStyle = style.bgColor;
+      if (r > 0) { roundRectPath(ctx, 0, 0, size, size, r); ctx.fill(); }
+      else { ctx.fillRect(0, 0, size, size); }
+    }
+    if (sourceType === 'text') {
+      ctx.font = style.fontWeight + ' ' + Math.floor(size * 0.78) + 'px ' + style.fontFamily + EMOJI_FONTS;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = style.textColor;
+      ctx.fillText(textValue, size / 2, Math.floor(size / 2) + Math.floor(size * 0.04));
+    } else if (sourceImg) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(sourceImg, 0, 0, size, size);
+    }
+    ctx.restore();
+
+    if (bw > 0) {
+      ctx.strokeStyle = style.borderColor;
+      ctx.lineWidth = bw;
+      var inset = bw / 2;
+      if (r > 0) { roundRectPath(ctx, inset, inset, size - bw, size - bw, Math.max(0, r - inset)); ctx.stroke(); }
+      else { ctx.strokeRect(inset, inset, size - bw, size - bw); }
+    }
+    return c;
+  }
+
+  function renderGallery() {
+    gallery.innerHTML = '';
+    SIZES.forEach(function (sz) {
+      var c = renderToCanvas(sz);
+      var cell = document.createElement('div');
+      cell.className = 'fav-size';
+      var img = document.createElement('img');
+      img.src = c.toDataURL('image/png');
+      img.style.width = sz + 'px';
+      img.style.height = sz + 'px';
+      var label = document.createElement('span');
+      label.className = 'fav-size-label';
+      label.textContent = sz + 'px';
+      cell.appendChild(img);
+      cell.appendChild(label);
+      gallery.appendChild(cell);
+    });
+  }
+
+  function updateTabFavicon() {
+    try {
+      var c = renderToCanvas(64);
+      var url = c.toDataURL('image/png');
+      var link = document.querySelector('link[rel="icon"]') || document.querySelector('link[rel~="icon"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.href = url;
+      liveHint.style.display = 'block';
+    } catch (e) {
+      liveHint.style.display = 'none';
+    }
+  }
+
+  function updateHtml() {
+    var s = '';
+    s += '<!-- 多尺寸 ICO（兼容旧浏览器 / 桌面） -->\n';
+    s += '<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon">\n';
+    s += '<!-- 矢量 SVG（现代浏览器，任意缩放清晰） -->\n';
+    s += '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n';
+    s += '<!-- Apple 触摸图标（需自行导出 180x180 PNG） -->\n';
+    s += '<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n';
+    htmlOut.value = s;
+  }
+
+  async function doRender() {
+    await loadSourceImage();
+    if (sourceType === 'none') {
+      placeholder.style.display = 'block';
+      liveHint.style.display = 'none';
+      gallery.innerHTML = '';
+      htmlOut.value = '';
+      return;
+    }
+    placeholder.style.display = 'none';
+    renderGallery();
+    updateTabFavicon();
+    updateHtml();
+  }
+
+  var renderTimer = null;
+  function debouncedRender() {
+    if (renderTimer) clearTimeout(renderTimer);
+    renderTimer = setTimeout(doRender, 300);
+  }
+
+  input.addEventListener('input', debouncedRender);
+
+  textInput.addEventListener('input', debouncedRender);
+
+  fileInput.addEventListener('change', function () {
+    if (fileInput.files && fileInput.files[0]) {
+      currentFile = fileInput.files[0];
+      doRender();
+    }
+  });
+
+  var tabButtons = document.querySelectorAll('#fav-tabs .fav-tab');
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      switchTab(btn.getAttribute('data-tab'));
+    });
+  });
+
+  function switchTab(tab) {
+    currentTab = tab;
+    tabButtons.forEach(function (b) {
+      b.classList.toggle('is-active', b.getAttribute('data-tab') === tab);
+    });
+    document.querySelectorAll('.fav-panel').forEach(function (p) {
+      p.classList.toggle('is-active', p.getAttribute('data-panel') === tab);
+    });
+    updateStyleVisibility();
+    doRender();
+  }
+
+  function updateStyleVisibility() {
+    var isText = (currentTab === 'text');
+    document.querySelectorAll('.fav-style-row[data-mode="text"]').forEach(function (row) {
+      row.classList.toggle('is-hidden', !isText);
+    });
+  }
+
+  document.getElementById('tool-clear').addEventListener('click', function () {
+    if (currentTab === 'code') { input.value = ''; input.focus(); }
+    else if (currentTab === 'file') { currentFile = null; fileInput.value = ''; }
+    else { textInput.value = ''; textInput.focus(); }
+    doRender();
+  });
+
+  document.getElementById('tool-example').addEventListener('click', function () {
+    switchTab('code');
+    input.value = DEFAULT_CODE;
+    doRender();
+    input.focus();
+  });
+
+  function downloadBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  async function canvasToPngBytes(canvas) {
+    var blob = await new Promise(function (res) { canvas.toBlob(res, 'image/png'); });
+    var buf = await blob.arrayBuffer();
+    return new Uint8Array(buf);
+  }
+
+  function buildICO(pngs) {
+    var num = pngs.length;
+    var headerSize = 6 + num * 16;
+    var header = new ArrayBuffer(6);
+    var hv = new DataView(header);
+    hv.setUint16(0, 0, true);
+    hv.setUint16(2, 1, true);
+    hv.setUint16(4, num, true);
+    var entries = new ArrayBuffer(num * 16);
+    var ev = new DataView(entries);
+    var offset = headerSize;
+    pngs.forEach(function (p, i) {
+      var e = i * 16;
+      ev.setUint8(e + 0, p.size >= 256 ? 0 : p.size);
+      ev.setUint8(e + 1, p.size >= 256 ? 0 : p.size);
+      ev.setUint8(e + 2, 0);
+      ev.setUint8(e + 3, 0);
+      ev.setUint16(e + 4, 1, true);
+      ev.setUint16(e + 6, 32, true);
+      ev.setUint32(e + 8, p.bytes.length, true);
+      ev.setUint32(e + 12, offset, true);
+      offset += p.bytes.length;
+    });
+    var out = new Uint8Array(offset);
+    out.set(new Uint8Array(header), 0);
+    out.set(new Uint8Array(entries), 6);
+    var pos = headerSize;
+    pngs.forEach(function (p) { out.set(p.bytes, pos); pos += p.bytes.length; });
+    return new Blob([out], { type: 'image/x-icon' });
+  }
+
+  document.getElementById('tool-ico').addEventListener('click', async function () {
+    if (sourceType === 'none') return;
+    var pngs = [];
+    for (var i = 0; i < ICO_SIZES.length; i++) {
+      var s = ICO_SIZES[i];
+      var bytes = await canvasToPngBytes(renderToCanvas(s));
+      pngs.push({ size: s, bytes: bytes });
+    }
+    downloadBlob(buildICO(pngs), 'favicon.ico');
+  });
+
+  document.querySelectorAll('[data-png]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (sourceType === 'none') return;
+      var s = parseInt(b.getAttribute('data-png'), 10);
+      var c = renderToCanvas(s);
+      c.toBlob(function (blob) { downloadBlob(blob, 'favicon-' + s + '.png'); }, 'image/png');
+    });
+  });
+
+  function escapeXml(s) {
+    return String(s).replace(/[<>&'"]/g, function (c) {
+      return { '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' }[c];
+    });
+  }
+
+  function buildSvgString() {
+    var R = 64 * style.radius / 100;
+    var bw = style.borderEnabled ? style.borderWidth : 0;
+    var p = [];
+    p.push('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" width="64" height="64">');
+    if (R > 0) {
+      p.push('<defs><clipPath id="favclip"><rect x="0" y="0" width="64" height="64" rx="' + R + '" ry="' + R + '"/></clipPath></defs>');
+    }
+    if (style.bgEnabled) {
+      if (R > 0) p.push('<rect x="0" y="0" width="64" height="64" rx="' + R + '" ry="' + R + '" fill="' + style.bgColor + '"/>');
+      else p.push('<rect x="0" y="0" width="64" height="64" fill="' + style.bgColor + '"/>');
+    }
+    var inner = '';
+    if (sourceType === 'text') {
+      inner = '<text x="32" y="46" font-family="' + style.fontFamily + ", 'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji', sans-serif" + '" font-size="48" font-weight="' + style.fontWeight + '" text-anchor="middle" fill="' + style.textColor + '">' + escapeXml(textValue) + '</text>';
+    } else {
+      inner = '<image href="' + currentSourceDataUri + '" xlink:href="' + currentSourceDataUri + '" x="0" y="0" width="64" height="64"/>';
+    }
+    if (R > 0) inner = '<g clip-path="url(#favclip)">' + inner + '</g>';
+    p.push(inner);
+    if (bw > 0) {
+      var inset = bw / 2;
+      var rx = R > 0 ? Math.max(0, R - inset) : 0;
+      p.push('<rect x="' + inset + '" y="' + inset + '" width="' + (64 - bw) + '" height="' + (64 - bw) + '" rx="' + rx + '" ry="' + rx + '" fill="none" stroke="' + style.borderColor + '" stroke-width="' + bw + '"/>');
+    }
+    p.push('</svg>');
+    return p.join('');
+  }
+
+  document.getElementById('tool-svg').addEventListener('click', function () {
+    if (sourceType === 'none') return;
+    var svg = buildSvgString();
+    downloadBlob(new Blob([svg], { type: 'image/svg+xml' }), 'favicon.svg');
+  });
+
+  document.getElementById('tool-html').addEventListener('click', function () {
+    if (!htmlOut.value) return;
+    navigator.clipboard.writeText(htmlOut.value).then(function () {
+      var btn = document.getElementById('tool-html');
+      var orig = btn.textContent;
+      btn.textContent = '已复制';
+      setTimeout(function () { btn.textContent = orig; }, 1500);
+    });
+  });
+
+  // style controls
+  var stBgOn = document.getElementById('st-bg-on');
+  var stBg = document.getElementById('st-bg');
+  var stRadius = document.getElementById('st-radius');
+  var stRadiusVal = document.getElementById('st-radius-val');
+  var stBorderOn = document.getElementById('st-border-on');
+  var stBorderColor = document.getElementById('st-border-color');
+  var stBorderW = document.getElementById('st-border-w');
+  var stText = document.getElementById('st-text');
+  var stFont = document.getElementById('st-font');
+  var stWeight = document.getElementById('st-weight');
+
+  function syncStyle() {
+    style.bgEnabled = stBgOn.checked;
+    style.bgColor = stBg.value;
+    style.radius = parseInt(stRadius.value, 10) || 0;
+    style.borderEnabled = stBorderOn.checked;
+    style.borderColor = stBorderColor.value;
+    style.borderWidth = parseInt(stBorderW.value, 10) || 0;
+    style.textColor = stText.value;
+    style.fontFamily = stFont.value;
+    style.fontWeight = stWeight.value;
+    stRadiusVal.textContent = style.radius + '%';
+  }
+
+  [stBgOn, stBg, stRadius, stBorderOn, stBorderColor, stBorderW, stText, stFont, stWeight].forEach(function (el) {
+    el.addEventListener('input', function () { syncStyle(); doRender(); });
+    el.addEventListener('change', function () { syncStyle(); doRender(); });
+  });
+  syncStyle();
+
+  // ---- comic custom controls (drive hidden native inputs) ----
+  function initSlider(sliderEl, inputEl) {
+    var track = sliderEl.querySelector('.fav-slider-track');
+    var fill = sliderEl.querySelector('.fav-slider-fill');
+    var thumb = sliderEl.querySelector('.fav-slider-thumb');
+    var dragging = false;
+    function paint() {
+      var min = +inputEl.min, max = +inputEl.max;
+      var ratio = (inputEl.value - min) / (max - min);
+      fill.style.width = (ratio * 100) + '%';
+      thumb.style.left = (ratio * 100) + '%';
+    }
+    function setFromX(x) {
+      var rect = track.getBoundingClientRect();
+      var ratio = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+      var min = +inputEl.min, max = +inputEl.max;
+      inputEl.value = Math.round(min + ratio * (max - min));
+      paint();
+      inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+      inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    sliderEl.addEventListener('pointerdown', function (e) { dragging = true; sliderEl.setPointerCapture(e.pointerId); setFromX(e.clientX); });
+    sliderEl.addEventListener('pointermove', function (e) { if (dragging) setFromX(e.clientX); });
+    sliderEl.addEventListener('pointerup', function () { dragging = false; });
+    sliderEl.addEventListener('pointercancel', function () { dragging = false; });
+    paint();
+  }
+
+  function initStepper(segEl, inputEl, valEl) {
+    segEl.querySelectorAll('.fav-step-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var step = +btn.getAttribute('data-step');
+        var min = +inputEl.min, max = +inputEl.max;
+        var v = Math.max(min, Math.min(max, (+inputEl.value || 0) + step));
+        inputEl.value = v;
+        valEl.textContent = v;
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+    valEl.textContent = inputEl.value;
+  }
+
+  function initSwatches(groupEl) {
+    var inputEl = document.getElementById(groupEl.getAttribute('data-target'));
+    var customBtn = groupEl.querySelector('.fav-swatch-custom');
+    var customOpened = false;
+    function activate(btn) {
+      groupEl.querySelectorAll('.fav-swatch').forEach(function (b) { b.classList.remove('is-active'); });
+      if (btn) btn.classList.add('is-active');
+    }
+    groupEl.querySelectorAll('.fav-swatch:not(.fav-swatch-custom)').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        inputEl.value = btn.getAttribute('data-color');
+        activate(btn);
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+    if (customBtn) {
+      customBtn.addEventListener('click', function () { customOpened = true; inputEl.click(); });
+      inputEl.addEventListener('input', function () { if (customOpened) activate(customBtn); });
+      inputEl.addEventListener('change', function () { if (customOpened) { activate(customBtn); customOpened = false; } });
+    }
+    var init = groupEl.querySelector('.fav-swatch[data-color="' + inputEl.value.toLowerCase() + '"]');
+    if (init) activate(init); else if (customBtn) activate(customBtn);
+  }
+
+  function initSeg(segEl) {
+    var inputEl = document.getElementById(segEl.getAttribute('data-target'));
+    function activate(btn) {
+      segEl.querySelectorAll('.fav-seg-btn').forEach(function (b) { b.classList.remove('is-active'); });
+      if (btn) btn.classList.add('is-active');
+    }
+    segEl.querySelectorAll('.fav-seg-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activate(btn);
+        inputEl.value = btn.getAttribute('data-val');
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+    var init = null;
+    segEl.querySelectorAll('.fav-seg-btn').forEach(function (b) { if (b.getAttribute('data-val') === inputEl.value) init = b; });
+    activate(init);
+  }
+
+  initSlider(document.getElementById('slider-radius'), document.getElementById('st-radius'));
+  initStepper(document.querySelector('.fav-stepper'), document.getElementById('st-border-w'), document.getElementById('st-border-w-val'));
+  document.querySelectorAll('.fav-swatches').forEach(initSwatches);
+  document.querySelectorAll('.fav-seg').forEach(initSeg);
+
+  updateStyleVisibility();
+  if (DEFAULT_CODE) doRender();
+})();
+</script>
